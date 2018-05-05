@@ -1,18 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { KeyboardComponent } from './component/keyboard/keyboard.component';
+import { SynthService } from './service/synth.service';
+import { KeyComponent } from './component/key/key.component';
+import { FrequenciesService } from './service/frequencies.service';
+import { AdsrComponent } from './component/adsr/adsr.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    KeyboardComponent,
+    KeyComponent,
+    AdsrComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [SynthService, FrequenciesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
