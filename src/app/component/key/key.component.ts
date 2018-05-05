@@ -2,9 +2,8 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { SynthService } from '../../service/synth.service';
 import { Config } from '../../model/config';
 import { ADSR } from '../../model/ADSR';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/delay';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'key',
@@ -66,7 +65,7 @@ export class KeyComponent implements OnInit {
   private release() {
     const delta = this.releaseMinStart - this.synthService.getCurrentTime();
     if (delta > 0) {
-      Observable.of(null).delay(delta * 1000).subscribe(it => {
+      of(null).pipe(delay(delta * 1000)).subscribe(it => {
         this.rampDown();
       });
     } else {

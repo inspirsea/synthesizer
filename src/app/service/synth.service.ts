@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ADSR } from '../model/ADSR';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { Config } from '../model/config';
 
 @Injectable()
