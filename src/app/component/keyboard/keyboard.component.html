@@ -1,4 +1,7 @@
-<key [frequenze]="frequence" [binding]="bindings[i]" *ngFor="let frequence of frequenciesService.frequencies; let i = index"></key>
+<div class="keyboard">
+  <key [frequenze]="frequence" [binding]="bindings[i]" *ngFor="let frequence of frequenciesService.frequencies; let i = index"></key>
+</div>
+
 <div>
   <adsr></adsr>
 </div>
