@@ -9,6 +9,7 @@ import { SynthService } from '../../service/synth.service';
 export class AdsrComponent implements OnInit {
 
   public adsr = this.synthService.adsr$.getValue();
+  public selectedTone: OscillatorType = 'sine';
 
   constructor(private synthService: SynthService) { }
 
@@ -17,5 +18,11 @@ export class AdsrComponent implements OnInit {
 
   public changeValue() {
     this.synthService.adsr$.next(this.adsr);
+  }
+
+  public changeToneType(toneType: OscillatorType) {
+    this.synthService.config$.next({
+      toneType: toneType
+    });
   }
 }

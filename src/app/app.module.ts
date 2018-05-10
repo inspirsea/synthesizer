@@ -8,6 +8,7 @@ import { SynthService } from './service/synth.service';
 import { KeyComponent } from './component/key/key.component';
 import { FrequenciesService } from './service/frequencies.service';
 import { AdsrComponent } from './component/adsr/adsr.component';
+import { NoiseService } from './service/noise.service';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { AdsrComponent } from './component/adsr/adsr.component';
     BrowserModule,
     FormsModule
   ],
-  providers: [SynthService, FrequenciesService],
+  providers: [SynthService, FrequenciesService, NoiseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

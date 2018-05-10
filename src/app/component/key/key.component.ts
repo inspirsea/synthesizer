@@ -4,6 +4,8 @@ import { Config } from '../../model/config';
 import { ADSR } from '../../model/ADSR';
 import { Observable, of, Subscription } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
+import { Tween } from '../../utils/tween';
+import { VolumeEnvelope } from '../../utils/volume-envelope';
 
 @Component({
   selector: 'key',
@@ -13,10 +15,11 @@ import { delay, map } from 'rxjs/operators';
 export class KeyComponent implements OnInit {
 
   @Input() binding: string;
-  @Input() frequenze: number;
+  @Input() frequency: number;
 
-  private gainNode = this.synthService.audioCtx.createGain();
-  private oscillator = this.synthService.audioCtx.createOscillator();
+  private volumeEnvelope: VolumeEnvelope;
+  private gainNode: GainNode;
+  private ocillatorNode: OscillatorNode;
   private playing = false;
   private decaySub: Subscription;
   constructor(private synthService: SynthService) {
@@ -37,56 +40,26 @@ export class KeyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.synthService.config$.subscribe(it => this.initialize(it));
+    const nodes = this.synthService.createSynthFlow(this.frequency);
+    this.gainNode = nodes[0];
+    this.ocillatorNode = nodes[1];
+
+    this.volumeEnvelope = new VolumeEnvelope(this.synthService.audioCtx, this.gainNode, this.synthService.adsr$.getValue());
+
+    this.synthService.config$.subscribe(it => {
+      this.updateConfig(it);
+    });
   }
 
   public play() {
-    if (!this.playing) {
-      this.playing = true;
-      this.reset();
-      this.gainNode.gain.setValueAtTime(0, this.synthService.getCurrentTime());
-      const adsr = this.synthService.adsr$.getValue();
-
-      const attackTime = this.synthService.getCurrentTime() + adsr.attackTime;
-
-      this.gainNode.gain.linearRampToValueAtTime(1, attackTime);
-
-      this.decaySub = of(null).pipe(delay(adsr.attackTime * 1000)).subscribe(it => {
-        this.gainNode.gain.linearRampToValueAtTime(adsr.sustainLevel, this.synthService.getCurrentTime() + adsr.decayTime);
-      });
-    }
+    this.volumeEnvelope.attack();
   }
 
-  private reset() {
-    this.synthService.audioCtx.resume();
-    this.gainNode.gain.cancelScheduledValues(this.synthService.getCurrentTime());
-    if (this.decaySub) {
-      this.decaySub.unsubscribe();
-    }
+  public release() {
+    this.volumeEnvelope.release();
   }
 
-  private initialize(config: Config) {
-    this.oscillator.type = config.toneType;
-    this.oscillator.frequency.setValueAtTime(this.frequenze, this.synthService.getCurrentTime());
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.synthService.audioCtx.destination);
-    this.oscillator.start();
-    this.gainNode.gain.setValueAtTime(0, this.synthService.getCurrentTime());
-  }
-
-  private release() {
-    this.playing = false;
-    this.rampDown();
-  }
-
-  private rampDown() {
-    this.decaySub.unsubscribe();
-    this.gainNode.gain.cancelScheduledValues(this.synthService.getCurrentTime());
-    this.gainNode.gain.linearRampToValueAtTime(0, this.getReleaseTime());
-    console.log(this.gainNode.gain.value);
-  }
-
-  private getReleaseTime() {
-    return this.synthService.getCurrentTime() + this.synthService.adsr$.getValue().releaseTime;
+  private updateConfig(it: Config) {
+    this.ocillatorNode.type = it.toneType;
   }
 }
