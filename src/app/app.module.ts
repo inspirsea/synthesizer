@@ -9,6 +9,9 @@ import { KeyComponent } from './component/key/key.component';
 import { FrequenciesService } from './service/frequencies.service';
 import { AdsrComponent } from './component/adsr/adsr.component';
 import { NoiseService } from './service/noise.service';
+import { FilterService } from './service/filter.service';
+import { FilterComponent } from './component/filter/filter.component';
+import { CoreSynthService } from './service/core-synth.service';
 
 
 @NgModule({
@@ -16,13 +19,14 @@ import { NoiseService } from './service/noise.service';
     AppComponent,
     KeyboardComponent,
     KeyComponent,
-    AdsrComponent
+    AdsrComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [SynthService, FrequenciesService, NoiseService],
+  providers: [SynthService, FrequenciesService, NoiseService, FilterService, CoreSynthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

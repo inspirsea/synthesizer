@@ -1,42 +1,32 @@
 import { of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ADSR } from '../model/ADSR';
+import { Envelope } from './envelope';
 
-export class VolumeEnvelope {
+export class VolumeEnvelope extends Envelope {
 
-  private active = false;
-  private decaySub: Subscription;
-
-  constructor(private audioContext: AudioContext, private gainNode: GainNode, private adsr: ADSR) {
+  constructor(audioContext: AudioContext, adsr: ADSR, private gainNode: GainNode) {
+    super(audioContext, adsr);
   }
 
   public attack() {
-    if (!this.active) {
-      this.active = true;
-      this.reset();
-      this.gainNode.gain.setTargetAtTime(0, this.audioContext.currentTime, 0.01);
-      this.gainNode.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
-
-      this.decaySub = of(null).pipe(delay(this.adsr.attackTime * 1000)).subscribe(it => {
-        this.gainNode.gain.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
-      });
-    }
+    super.attack();
   }
 
   public release() {
-    this.active = false;
-    this.rampDown();
+    super.release();
   }
 
-  private rampDown() {
-    this.decaySub.unsubscribe();
+  protected setAttack() {
+    this.gainNode.gain.setTargetAtTime(0, this.audioContext.currentTime, 0.01);
+    this.gainNode.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+  }
+
+  protected setDecay() {
+    this.gainNode.gain.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
+  }
+
+  protected setRelease() {
     this.gainNode.gain.setTargetAtTime(0, this.audioContext.currentTime, this.adsr.releaseTime);
-  }
-
-  private reset() {
-    this.audioContext.resume();
-    if (this.decaySub) {
-      this.decaySub.unsubscribe();
-    }
   }
 }

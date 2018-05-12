@@ -6,6 +6,9 @@ import { Observable, of, Subscription } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { Tween } from '../../utils/tween';
 import { VolumeEnvelope } from '../../utils/volume-envelope';
+import { CoreSynthService } from '../../service/core-synth.service';
+import { FilterService } from '../../service/filter.service';
+import { FilterEnvelope } from '../../utils/filter-envelope';
 
 @Component({
   selector: 'key',
@@ -18,11 +21,12 @@ export class KeyComponent implements OnInit {
   @Input() frequency: number;
 
   private volumeEnvelope: VolumeEnvelope;
+  private filterEnvelopes: FilterEnvelope[];
   private gainNode: GainNode;
   private ocillatorNode: OscillatorNode;
   private playing = false;
   private decaySub: Subscription;
-  constructor(private synthService: SynthService) {
+  constructor(private synthService: SynthService, private coreSynthService: CoreSynthService, private filterService: FilterService) {
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -40,23 +44,38 @@ export class KeyComponent implements OnInit {
   }
 
   ngOnInit() {
-    const nodes = this.synthService.createSynthFlow(this.frequency);
-    this.gainNode = nodes[0];
-    this.ocillatorNode = nodes[1];
+    this.load();
 
-    this.volumeEnvelope = new VolumeEnvelope(this.synthService.audioCtx, this.gainNode, this.synthService.adsr$.getValue());
+    this.filterService.filtersMetadata$.subscribe(it => {
+      this.load();
+    });
 
     this.synthService.config$.subscribe(it => {
       this.updateConfig(it);
     });
   }
 
+  private load() {
+    const nodes = this.synthService.createSynthFlow(this.frequency);
+    this.gainNode = nodes[0];
+    this.ocillatorNode = nodes[1];
+    this.filterEnvelopes = nodes[2];
+
+    this.volumeEnvelope = new VolumeEnvelope(this.coreSynthService.audioCtx, this.synthService.adsr$.getValue(), this.gainNode);
+  }
+
   public play() {
     this.volumeEnvelope.attack();
+    for (const envelope of this.filterEnvelopes) {
+      envelope.attack();
+    }
   }
 
   public release() {
     this.volumeEnvelope.release();
+    for (const envelope of this.filterEnvelopes) {
+      envelope.release();
+    }
   }
 
   private updateConfig(it: Config) {
