@@ -9,6 +9,20 @@ import { CoreSynthService } from '../../service/core-synth.service';
 })
 export class FilterComponent implements OnInit {
 
+  public cutoffFrequency = 0;
+  public peak = 0;
+  public selectedType: BiquadFilterType = 'lowpass';
+  public filterTypes = [
+    'lowpass',
+    'highpass',
+    'bandpass',
+    'lowshelf',
+    'highshelf',
+    'peaking',
+    'notch',
+    'allpass'
+  ];
+
   constructor(public filterService: FilterService, private coreSynthService: CoreSynthService) {
   }
 
@@ -16,18 +30,11 @@ export class FilterComponent implements OnInit {
   }
 
   public addFilter() {
-    const filters = this.filterService.filtersMetadata$.getValue();
-    filters.push({
-      type: 'lowpass',
-      frequency: {
-        start: 10,
-        attack: 100,
-        sustain: 100
-      },
-      gain: null,
-      Q: null
+    this.filterService.filter$.next({
+      type: this.selectedType,
+      frequency: this.cutoffFrequency,
+      Q: this.peak,
+      gain: 0
     });
-    this.filterService.filtersMetadata$.next(filters);
   }
-
 }

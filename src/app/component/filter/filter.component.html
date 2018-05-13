@@ -1,4 +1,12 @@
 <div *ngFor="let filter of filterService.filters$ | async">
 
 </div>
+
+<input type="number" [(ngModel)]="cutoffFrequency">
+<input type="number" [(ngModel)]="peak">
+<select [(ngModel)]="selectedType">
+  <option [value]="filter" *ngFor="let filter of filterTypes">
+    {{filter}}
+  </option>
+</select>
 <button (click)="addFilter()">add</button>

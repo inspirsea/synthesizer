@@ -5,7 +5,6 @@ import { Config } from '../model/config';
 import { NoiseService } from './noise.service';
 import { FilterService } from './filter.service';
 import { CoreSynthService } from './core-synth.service';
-import { FilterEnvelope } from '../utils/filter-envelope';
 
 @Injectable()
 export class SynthService {
@@ -28,24 +27,19 @@ export class SynthService {
     this.noiseService.createBuffers(this.coreSynthService.audioCtx);
   }
 
-  public createSynthFlow(frequency: number): [GainNode, OscillatorNode, FilterEnvelope[]] {
+  public createSynthFlow(frequency: number): [GainNode, OscillatorNode] {
     const gainNode = this.coreSynthService.audioCtx.createGain();
     const oscillator = this.coreSynthService.audioCtx.createOscillator();
-    let envelopes: FilterEnvelope[];
 
     gainNode.gain.setValueAtTime(0, this.coreSynthService.audioCtx.currentTime);
 
     oscillator.type = this.config$.getValue().toneType;
     oscillator.frequency.setValueAtTime(frequency, this.coreSynthService.audioCtx.currentTime);
-    envelopes = this.filterService.connect(
-      oscillator,
-      gainNode,
-      this.coreSynthService.audioCtx,
-      { attackTime: 0.05, decayTime: 0.05, sustainLevel: 1000, releaseTime: 0.1 });
+    this.filterService.connect(oscillator, gainNode, this.coreSynthService.audioCtx);
 
     gainNode.connect(this.coreSynthService.audioCtx.destination);
     oscillator.start();
 
-    return [gainNode, oscillator, envelopes];
+    return [gainNode, oscillator];
   }
 }

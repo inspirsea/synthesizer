@@ -8,7 +8,6 @@ import { Tween } from '../../utils/tween';
 import { VolumeEnvelope } from '../../utils/volume-envelope';
 import { CoreSynthService } from '../../service/core-synth.service';
 import { FilterService } from '../../service/filter.service';
-import { FilterEnvelope } from '../../utils/filter-envelope';
 
 @Component({
   selector: 'key',
@@ -21,7 +20,6 @@ export class KeyComponent implements OnInit {
   @Input() frequency: number;
 
   private volumeEnvelope: VolumeEnvelope;
-  private filterEnvelopes: FilterEnvelope[];
   private gainNode: GainNode;
   private ocillatorNode: OscillatorNode;
   private playing = false;
@@ -46,7 +44,7 @@ export class KeyComponent implements OnInit {
   ngOnInit() {
     this.load();
 
-    this.filterService.filtersMetadata$.subscribe(it => {
+    this.filterService.filter$.subscribe(it => {
       this.load();
     });
 
@@ -59,23 +57,16 @@ export class KeyComponent implements OnInit {
     const nodes = this.synthService.createSynthFlow(this.frequency);
     this.gainNode = nodes[0];
     this.ocillatorNode = nodes[1];
-    this.filterEnvelopes = nodes[2];
 
     this.volumeEnvelope = new VolumeEnvelope(this.coreSynthService.audioCtx, this.synthService.adsr$.getValue(), this.gainNode);
   }
 
   public play() {
     this.volumeEnvelope.attack();
-    for (const envelope of this.filterEnvelopes) {
-      envelope.attack();
-    }
   }
 
   public release() {
     this.volumeEnvelope.release();
-    for (const envelope of this.filterEnvelopes) {
-      envelope.release();
-    }
   }
 
   private updateConfig(it: Config) {
