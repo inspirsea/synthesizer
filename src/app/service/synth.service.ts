@@ -4,7 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Config } from '../model/config';
 import { NoiseService } from './noise.service';
 import { FilterService } from './filter.service';
-import { CoreSynthService } from './core-synth.service';
+import { AudioService } from './audio.service';
+import { SourceService } from './source.service';
+import { Source } from '../model/source';
 
 @Injectable()
 export class SynthService {
@@ -23,23 +25,38 @@ export class SynthService {
   public adsr$ = new BehaviorSubject<ADSR>(this.defaultADSR);
   public config$ = new BehaviorSubject<Config>(this.defaultConfig);
 
-  constructor(private noiseService: NoiseService, private filterService: FilterService, private coreSynthService: CoreSynthService) {
-    this.noiseService.createBuffers(this.coreSynthService.audioCtx);
+  constructor(
+    private noiseService: NoiseService,
+    private filterService: FilterService,
+    private audioService: AudioService,
+    private sourceService: SourceService) {
+    this.noiseService.createBuffers(this.audioService.audioCtx);
   }
 
-  public createSynthFlow(frequency: number): [GainNode, OscillatorNode] {
-    const gainNode = this.coreSynthService.audioCtx.createGain();
-    const oscillator = this.coreSynthService.audioCtx.createOscillator();
+  public createSynthFlow(frequency: number): GainNode[] {
+    const ctx = this.audioService.audioCtx as any;
+    const constantNode = ctx.createConstantSource();
+    const gainNodes = [];
+    for (const source of this.sourceService.sources$.getValue()) {
+      const gainNode = this.createSourceController(this.audioService.audioCtx, source, frequency);
+      constantNode.connect(gainNode.gain);
 
-    gainNode.gain.setValueAtTime(0, this.coreSynthService.audioCtx.currentTime);
+      gainNode.connect(this.audioService.audioCtx.destination);
+      gainNodes.push(gainNode);
+    }
 
-    oscillator.type = this.config$.getValue().toneType;
-    oscillator.frequency.setValueAtTime(frequency, this.coreSynthService.audioCtx.currentTime);
-    this.filterService.connect(oscillator, gainNode, this.coreSynthService.audioCtx);
+    // this.filterService.connect(oscillator, gainNode, this.audioService.audioCtx);
 
-    gainNode.connect(this.coreSynthService.audioCtx.destination);
-    oscillator.start();
+    return gainNodes;
+  }
 
-    return [gainNode, oscillator];
+  private createSourceController(audioContext: AudioContext, source: Source, frequency: number) {
+    const gainNode = audioContext.createGain();
+    const sourceNode = this.sourceService.createSource(audioContext, source, frequency);
+    sourceNode.connect(gainNode);
+    gainNode.gain.setValueAtTime(0, this.audioService.audioCtx.currentTime);
+
+    sourceNode.start();
+    return gainNode;
   }
 }

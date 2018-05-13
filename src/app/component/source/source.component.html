@@ -1,0 +1,10 @@
+<div class="source">
+  <div class="source-child">{{title}}</div>
+
+  <div class="source-child">
+    <select [(ngModel)]="source.type" (change)="updateSource()">
+      <option [value]="type" *ngFor="let type of wavetypes">{{type}}</option>
+    </select>
+  </div>
+</div>
+

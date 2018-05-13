@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../service/filter.service';
-import { CoreSynthService } from '../../service/core-synth.service';
+import { AudioService } from '../../service/audio.service';
 
 @Component({
   selector: 'filter',
@@ -23,7 +23,7 @@ export class FilterComponent implements OnInit {
     'allpass'
   ];
 
-  constructor(public filterService: FilterService, private coreSynthService: CoreSynthService) {
+  constructor(public filterService: FilterService, private audioService: AudioService) {
   }
 
   ngOnInit() {

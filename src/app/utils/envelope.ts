@@ -33,7 +33,9 @@ export abstract class Envelope {
   protected abstract setRelease();
 
   private rampDown() {
-    this.decaySub.unsubscribe();
+    if (this.decaySub) {
+      this.decaySub.unsubscribe();
+    }
     this.setRelease();
   }
 

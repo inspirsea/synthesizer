@@ -6,8 +6,9 @@ import { Observable, of, Subscription } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { Tween } from '../../utils/tween';
 import { VolumeEnvelope } from '../../utils/volume-envelope';
-import { CoreSynthService } from '../../service/core-synth.service';
 import { FilterService } from '../../service/filter.service';
+import { AudioService } from '../../service/audio.service';
+import { SourceService } from '../../service/source.service';
 
 @Component({
   selector: 'key',
@@ -20,11 +21,14 @@ export class KeyComponent implements OnInit {
   @Input() frequency: number;
 
   private volumeEnvelope: VolumeEnvelope;
-  private gainNode: GainNode;
-  private ocillatorNode: OscillatorNode;
+  private gainNodes: GainNode[];
   private playing = false;
   private decaySub: Subscription;
-  constructor(private synthService: SynthService, private coreSynthService: CoreSynthService, private filterService: FilterService) {
+  constructor(
+    private synthService: SynthService,
+    private audioService: AudioService,
+    private filterService: FilterService,
+    private sourceService: SourceService) {
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -48,17 +52,15 @@ export class KeyComponent implements OnInit {
       this.load();
     });
 
-    this.synthService.config$.subscribe(it => {
-      this.updateConfig(it);
+    this.sourceService.sources$.subscribe(it => {
+      this.load();
     });
   }
 
   private load() {
-    const nodes = this.synthService.createSynthFlow(this.frequency);
-    this.gainNode = nodes[0];
-    this.ocillatorNode = nodes[1];
+    this.gainNodes = this.synthService.createSynthFlow(this.frequency);
 
-    this.volumeEnvelope = new VolumeEnvelope(this.coreSynthService.audioCtx, this.synthService.adsr$.getValue(), this.gainNode);
+    this.volumeEnvelope = new VolumeEnvelope(this.audioService.audioCtx, this.synthService.adsr$.getValue(), this.gainNodes);
   }
 
   public play() {
@@ -67,9 +69,5 @@ export class KeyComponent implements OnInit {
 
   public release() {
     this.volumeEnvelope.release();
-  }
-
-  private updateConfig(it: Config) {
-    this.ocillatorNode.type = it.toneType;
   }
 }

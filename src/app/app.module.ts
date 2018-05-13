@@ -11,7 +11,10 @@ import { AdsrComponent } from './component/adsr/adsr.component';
 import { NoiseService } from './service/noise.service';
 import { FilterService } from './service/filter.service';
 import { FilterComponent } from './component/filter/filter.component';
-import { CoreSynthService } from './service/core-synth.service';
+import { SourceComponent } from './component/source/source.component';
+import { SynthesizerComponent } from './component/synthesizer/synthesizer.component';
+import { SourceService } from './service/source.service';
+import { AudioService } from './service/audio.service';
 
 
 @NgModule({
@@ -20,13 +23,15 @@ import { CoreSynthService } from './service/core-synth.service';
     KeyboardComponent,
     KeyComponent,
     AdsrComponent,
-    FilterComponent
+    FilterComponent,
+    SourceComponent,
+    SynthesizerComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [SynthService, FrequenciesService, NoiseService, FilterService, CoreSynthService],
+  providers: [SynthService, FrequenciesService, NoiseService, FilterService, AudioService, SourceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

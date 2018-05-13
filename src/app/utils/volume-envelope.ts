@@ -5,7 +5,7 @@ import { Envelope } from './envelope';
 
 export class VolumeEnvelope extends Envelope {
 
-  constructor(audioContext: AudioContext, adsr: ADSR, private gainNode: GainNode) {
+  constructor(audioContext: AudioContext, adsr: ADSR, private gainNodes: GainNode[]) {
     super(audioContext, adsr);
   }
 
@@ -18,15 +18,21 @@ export class VolumeEnvelope extends Envelope {
   }
 
   protected setAttack() {
-    this.gainNode.gain.setTargetAtTime(0, this.audioContext.currentTime, 0.01);
-    this.gainNode.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+    for (const node of this.gainNodes) {
+      node.gain.setTargetAtTime(0, this.audioContext.currentTime, 0.01);
+      node.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+    }
   }
 
   protected setDecay() {
-    this.gainNode.gain.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
+    for (const node of this.gainNodes) {
+      node.gain.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
+    }
   }
 
   protected setRelease() {
-    this.gainNode.gain.setTargetAtTime(0, this.audioContext.currentTime, this.adsr.releaseTime);
+    for (const node of this.gainNodes) {
+      node.gain.setTargetAtTime(0, this.audioContext.currentTime, this.adsr.releaseTime);
+    }
   }
 }
