@@ -19,10 +19,4 @@ export class AdsrComponent implements OnInit {
   public changeValue() {
     this.synthService.adsr$.next(this.adsr);
   }
-
-  public changeToneType(toneType: OscillatorType) {
-    this.synthService.config$.next({
-      toneType: toneType
-    });
-  }
 }

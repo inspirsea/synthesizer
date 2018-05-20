@@ -22,7 +22,6 @@ export class NoiseService {
     const whiteNoiseSource = audioContext.createBufferSource();
     whiteNoiseSource.buffer = this.whiteNoiseBuffer;
     whiteNoiseSource.loop = true;
-    whiteNoiseSource.start(0);
 
     return whiteNoiseSource;
   }

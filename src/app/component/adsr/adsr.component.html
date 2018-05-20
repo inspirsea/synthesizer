@@ -2,10 +2,3 @@
 <input (change)="changeValue()" [(ngModel)]="adsr.decayTime" type="number">
 <input (change)="changeValue()" [(ngModel)]="adsr.sustainLevel" type="number">
 <input (change)="changeValue()" [(ngModel)]="adsr.releaseTime" type="number">
-
-<select (change)="changeToneType(selectedTone)" [(ngModel)]="selectedTone">
-  <option value="sine">Sine</option>
-  <option value="square">Square</option>
-  <option value="sawtooth">Sawtooth</option>
-  <option value="triangle">Triangle</option>
-</select>

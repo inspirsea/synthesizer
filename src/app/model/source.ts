@@ -1,4 +1,4 @@
-export class Source {
-  type: OscillatorType;
+export interface Source {
+  sourcetype: string;
   on: boolean;
 }

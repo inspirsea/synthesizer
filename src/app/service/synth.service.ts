@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ADSR } from '../model/ADSR';
 import { BehaviorSubject } from 'rxjs';
 import { Config } from '../model/config';
@@ -6,7 +6,9 @@ import { NoiseService } from './noise.service';
 import { FilterService } from './filter.service';
 import { AudioService } from './audio.service';
 import { SourceService } from './source.service';
-import { Source } from '../model/source';
+import { OcillatorSource } from '../model/ocillator-source';
+import { VolumeEnvelope } from '../utils/volume-envelope';
+import { Synth } from '../utils/synth';
 
 @Injectable()
 export class SynthService {
@@ -18,12 +20,10 @@ export class SynthService {
     releaseTime: 0.1
   };
 
-  private defaultConfig: Config = {
-    toneType: 'sine'
-  };
-
   public adsr$ = new BehaviorSubject<ADSR>(this.defaultADSR);
-  public config$ = new BehaviorSubject<Config>(this.defaultConfig);
+  private synths: Synth[] = [];
+  private total = 8;
+  private count = 0;
 
   constructor(
     private noiseService: NoiseService,
@@ -31,32 +31,19 @@ export class SynthService {
     private audioService: AudioService,
     private sourceService: SourceService) {
     this.noiseService.createBuffers(this.audioService.audioCtx);
+
+    for (let i = 0; i < this.total; i++) {
+      this.synths.push(new Synth(this.audioService.audioCtx, this.sourceService, this.filterService, this.adsr$.getValue()));
+    }
   }
 
-  public createSynthFlow(frequency: number): GainNode[] {
-    const ctx = this.audioService.audioCtx as any;
-    const constantNode = ctx.createConstantSource();
-    const gainNodes = [];
-    for (const source of this.sourceService.sources$.getValue()) {
-      const gainNode = this.createSourceController(this.audioService.audioCtx, source, frequency);
-      constantNode.connect(gainNode.gain);
-
-      gainNode.connect(this.audioService.audioCtx.destination);
-      gainNodes.push(gainNode);
+  public getSynth(id: number) {
+    const synth = this.synths[this.count++];
+    synth.usedBy = id;
+    if (this.count >= this.total) {
+      this.count = 0;
     }
 
-    // this.filterService.connect(oscillator, gainNode, this.audioService.audioCtx);
-
-    return gainNodes;
-  }
-
-  private createSourceController(audioContext: AudioContext, source: Source, frequency: number) {
-    const gainNode = audioContext.createGain();
-    const sourceNode = this.sourceService.createSource(audioContext, source, frequency);
-    sourceNode.connect(gainNode);
-    gainNode.gain.setValueAtTime(0, this.audioService.audioCtx.currentTime);
-
-    sourceNode.start();
-    return gainNode;
+    return synth;
   }
 }

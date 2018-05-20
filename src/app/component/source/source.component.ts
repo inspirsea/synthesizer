@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SourceService } from '../../service/source.service';
 import { AudioService } from '../../service/audio.service';
-import { Source } from '../../model/source';
+import { OcillatorSource } from '../../model/ocillator-source';
 
 @Component({
   selector: 'synth-source',
@@ -20,20 +20,21 @@ export class SourceComponent implements OnInit {
     'triangle'
   ];
 
-  public source: Source = {
+  public source: OcillatorSource = {
     on: false,
-    type: this.wavetypes[0]
+    type: this.wavetypes[0],
+    sourcetype: 'ocillator'
   };
 
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
 
   ngOnInit() {
-    const sources = this.sourceService.sources$.getValue();
+    const sources = this.sourceService.sources.getValue();
     sources.push(this.source);
-    this.sourceService.sources$.next(sources);
+    this.sourceService.sources.next(sources);
   }
 
   public updateSource() {
-    this.sourceService.sources$.next(this.sourceService.sources$.getValue());
+    this.sourceService.sources.next(this.sourceService.sources.getValue());
   }
 }

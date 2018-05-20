@@ -15,6 +15,7 @@ import { SourceComponent } from './component/source/source.component';
 import { SynthesizerComponent } from './component/synthesizer/synthesizer.component';
 import { SourceService } from './service/source.service';
 import { AudioService } from './service/audio.service';
+import { NoiseComponent } from './component/noise/noise.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AudioService } from './service/audio.service';
     AdsrComponent,
     FilterComponent,
     SourceComponent,
-    SynthesizerComponent
+    SynthesizerComponent,
+    NoiseComponent
   ],
   imports: [
     BrowserModule,

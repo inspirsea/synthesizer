@@ -9,26 +9,22 @@ import { VolumeEnvelope } from '../../utils/volume-envelope';
 import { FilterService } from '../../service/filter.service';
 import { AudioService } from '../../service/audio.service';
 import { SourceService } from '../../service/source.service';
+import { Synth } from '../../utils/synth';
 
 @Component({
   selector: 'key',
   templateUrl: './key.component.html',
   styleUrls: ['./key.component.scss']
 })
-export class KeyComponent implements OnInit {
+export class KeyComponent {
 
   @Input() binding: string;
   @Input() frequency: number;
 
-  private volumeEnvelope: VolumeEnvelope;
-  private gainNodes: GainNode[];
-  private playing = false;
-  private decaySub: Subscription;
+  private synth: Synth;
+
   constructor(
-    private synthService: SynthService,
-    private audioService: AudioService,
-    private filterService: FilterService,
-    private sourceService: SourceService) {
+    private synthService: SynthService) {
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -45,29 +41,17 @@ export class KeyComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.load();
-
-    this.filterService.filter$.subscribe(it => {
-      this.load();
-    });
-
-    this.sourceService.sources$.subscribe(it => {
-      this.load();
-    });
-  }
-
-  private load() {
-    this.gainNodes = this.synthService.createSynthFlow(this.frequency);
-
-    this.volumeEnvelope = new VolumeEnvelope(this.audioService.audioCtx, this.synthService.adsr$.getValue(), this.gainNodes);
-  }
-
   public play() {
-    this.volumeEnvelope.attack();
+    if (!this.synth || (this.synth.usedBy !== this.frequency)) {
+      this.synth = this.synthService.getSynth(this.frequency);
+    }
+
+    this.synth.attack(this.frequency);
   }
 
   public release() {
-    this.volumeEnvelope.release();
+    if (this.synth) {
+      this.synth.release();
+    }
   }
 }
