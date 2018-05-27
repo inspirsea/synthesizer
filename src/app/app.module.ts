@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { KeyboardComponent } from './component/keyboard/keyboard.component';
@@ -16,7 +17,7 @@ import { SynthesizerComponent } from './component/synthesizer/synthesizer.compon
 import { SourceService } from './service/source.service';
 import { AudioService } from './service/audio.service';
 import { NoiseComponent } from './component/noise/noise.component';
-
+import { ExperimentalComponent } from './component/experimental/experimental.component';
 
 @NgModule({
   declarations: [
@@ -27,11 +28,22 @@ import { NoiseComponent } from './component/noise/noise.component';
     FilterComponent,
     SourceComponent,
     SynthesizerComponent,
-    NoiseComponent
+    NoiseComponent,
+    ExperimentalComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: ExperimentalComponent
+      },
+      {
+        path: 'sunesynth',
+        loadChildren: './module/sunesynth/sunesynth.module#SunesynthModule'
+      }
+    ])
   ],
   providers: [SynthService, FrequenciesService, NoiseService, FilterService, AudioService, SourceService],
   bootstrap: [AppComponent]

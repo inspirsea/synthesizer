@@ -1,0 +1,117 @@
+sunesynth {
+  font-family: "gunship";
+  display: flex;
+  flex: 1 100%;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: $light-background;
+  color: $light;
+
+  main.container {
+    display: grid;
+    grid-template-columns:
+      [gutter-left] 20px
+      [col1] auto
+      [col2] auto
+      [col3] 11%
+      [col4] 11%
+      [col5] 11%
+      [col6] 11%
+      [col7] 11%
+      [col8] 11%
+      [gutter-right] 20px;
+    grid-template-rows:
+      [gutter-top] 20px
+      [head] 50px
+      [row1] 20%
+      [row2] 20%
+      [row3] 20%
+      [row4] auto
+      [gutter-bottom] 20px;
+    width: 800px;
+    height: 600px;
+    background-color: $background;
+    border: 1px solid #000;
+    border-radius: 3px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .66) inset;
+
+    header {
+      grid-column-start: col1;
+      grid-column-end: col8;
+      grid-row-start: head;
+      grid-row-end: row1;
+      h1 {
+        margin-top: -8px;
+        margin-bottom: 10px;
+        font-size: 42px;
+        letter-spacing: 2px;
+      }
+    }
+  }
+
+  .osc1 {
+    grid-column-start: col1;
+    grid-column-end: col2;
+    grid-row-start: row1;
+    grid-row-end: row4;
+  }
+
+  .osc2 {
+    grid-column-start: col2;
+    grid-column-end: col3;
+    grid-row-start: row1;
+    grid-row-end: row4;
+  }
+
+  .filter {
+    grid-column-start: col3;
+    grid-column-end: col5;
+    grid-row-start: row1;
+    grid-row-end: row2;
+  }
+
+  .lfo {
+    grid-column-start: col5;
+    grid-column-end: col7;
+    grid-row-start: row1;
+    grid-row-end: row2;
+  }
+
+  .amp {
+    grid-column-start: col7;
+    grid-column-end: gutter-right;
+    grid-row-start: row1;
+    grid-row-end: row2;
+  }
+
+  .amp-env {
+    grid-column-start: col3;
+    grid-column-end: col6;
+    grid-row-start: row2;
+    grid-row-end: row4;
+  }
+
+  .filter-env {
+    grid-column-start: col6;
+    grid-column-end: gutter-right;
+    grid-row-start: row2;
+    grid-row-end: row4;
+  }
+
+  .panel {
+    border: 1px solid $light;
+    margin: 2px;
+
+    header {
+      background-color: $light;
+      color: $background;
+
+      h3 {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+}

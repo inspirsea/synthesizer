@@ -1,0 +1,10 @@
+<div class="fader-container">
+  <div class="fader-background">
+    <div class="fader-knob" [style.transform]="'translateY(' + value + 'px)'">
+
+    </div>
+  </div>
+  <div *ngIf="label" class="fader-label">
+    {{ label }}
+  </div>
+</div>
