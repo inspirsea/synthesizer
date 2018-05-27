@@ -9,6 +9,7 @@ import { SourceService } from './source.service';
 import { OcillatorSource } from '../model/ocillator-source';
 import { VolumeEnvelope } from '../utils/volume-envelope';
 import { Synth } from '../utils/synth';
+import { LfoService } from './lfo.service';
 
 @Injectable()
 export class SynthService {
@@ -29,11 +30,17 @@ export class SynthService {
     private noiseService: NoiseService,
     private filterService: FilterService,
     private audioService: AudioService,
-    private sourceService: SourceService) {
+    private sourceService: SourceService,
+    private lfoService: LfoService) {
     this.noiseService.createBuffers(this.audioService.audioCtx);
 
     for (let i = 0; i < this.total; i++) {
-      this.synths.push(new Synth(this.audioService.audioCtx, this.sourceService, this.filterService, this.adsr$.getValue()));
+      this.synths.push(new Synth(
+        this.audioService.audioCtx,
+        this.sourceService,
+        this.filterService,
+        this.lfoService,
+        this.adsr$.getValue()));
     }
   }
 

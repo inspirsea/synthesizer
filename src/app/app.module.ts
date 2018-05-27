@@ -16,6 +16,8 @@ import { SynthesizerComponent } from './component/synthesizer/synthesizer.compon
 import { SourceService } from './service/source.service';
 import { AudioService } from './service/audio.service';
 import { NoiseComponent } from './component/noise/noise.component';
+import { LfoComponent } from './component/lfo/lfo.component';
+import { LfoService } from './service/lfo.service';
 
 
 @NgModule({
@@ -27,13 +29,21 @@ import { NoiseComponent } from './component/noise/noise.component';
     FilterComponent,
     SourceComponent,
     SynthesizerComponent,
-    NoiseComponent
+    NoiseComponent,
+    LfoComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [SynthService, FrequenciesService, NoiseService, FilterService, AudioService, SourceService],
+  providers: [
+    SynthService,
+    FrequenciesService,
+    NoiseService,
+    FilterService,
+    AudioService,
+    SourceService,
+    LfoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

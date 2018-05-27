@@ -11,6 +11,8 @@ import { NoiseType } from '../../model/noise-type';
 })
 export class NoiseComponent implements OnInit {
 
+  public on = false;
+
   public source: NoiseSource = {
     on: false,
     type: NoiseType.white,
@@ -20,9 +22,21 @@ export class NoiseComponent implements OnInit {
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
 
   ngOnInit() {
-    const sources = this.sourceService.sources.getValue();
-    sources.push(this.source);
-    this.sourceService.sources.next(sources);
+  }
+
+  public toggle() {
+    this.on = !this.on;
+    const sources = this.sourceService.sources$.getValue();
+    if (this.on) {
+      sources.push(this.source);
+    } else {
+      const index = sources.indexOf(this.source);
+      if (index !== -1) {
+        sources.splice(index, 1);
+      }
+    }
+
+    this.sourceService.sources$.next(sources);
   }
 
 }

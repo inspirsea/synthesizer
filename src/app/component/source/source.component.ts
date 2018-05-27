@@ -29,12 +29,12 @@ export class SourceComponent implements OnInit {
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
 
   ngOnInit() {
-    const sources = this.sourceService.sources.getValue();
+    const sources = this.sourceService.sources$.getValue();
     sources.push(this.source);
-    this.sourceService.sources.next(sources);
+    this.sourceService.sources$.next(sources);
   }
 
   public updateSource() {
-    this.sourceService.sources.next(this.sourceService.sources.getValue());
+    this.sourceService.sources$.next(this.sourceService.sources$.getValue());
   }
 }

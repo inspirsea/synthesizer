@@ -4,6 +4,7 @@ import { ADSR } from '../model/ADSR';
 import { OcillatorSource } from '../model/ocillator-source';
 import { FilterService } from '../service/filter.service';
 import { NoiseSource } from '../model/noise-source';
+import { LfoService } from '../service/lfo.service';
 import { Source } from '../model/source';
 
 export class Synth {
@@ -16,13 +17,18 @@ export class Synth {
     private audioContext: AudioContext,
     private sourceService: SourceService,
     private filterService: FilterService,
+    private lfoService: LfoService,
     private adsr: ADSR) {
-    this.sourceService.sources.subscribe(it => {
-      this.volumeEnvelope = this.createSynth(it);
+    this.sourceService.sources$.subscribe(it => {
+      this.volumeEnvelope = this.createSynth();
     });
 
     this.filterService.filter$.subscribe(it => {
-      this.volumeEnvelope = this.createSynth(this.sourceService.sources.getValue());
+      this.volumeEnvelope = this.createSynth();
+    });
+
+    this.lfoService.lfo$.subscribe(it => {
+      this.volumeEnvelope = this.createSynth();
     });
   }
 
@@ -41,14 +47,23 @@ export class Synth {
     }
   }
 
-  private createSynth(sources: Source[]): VolumeEnvelope {
+  private createSynth(): VolumeEnvelope {
     this.removeSourceNodes();
+
     const gainNodes = [];
+    const sources = this.sourceService.sources$.getValue();
+    const lfos = this.lfoService.lfo$.getValue();
+
     for (const source of sources) {
       const gainNode = this.createGain(this.audioContext);
-      let sourceNode: AudioNode;
+      let sourceNode: any;
       if (source.sourcetype === 'ocillator') {
         sourceNode = this.createOcillatorSource(this.audioContext, source as OcillatorSource);
+        if (this.lfoService.lfo$.getValue()[0]) {
+          const lfo = this.lfoService.createLfo(this.lfoService.lfo$.getValue()[0], this.audioContext);
+          lfo.connect(sourceNode.frequency);
+        }
+
         this.sourceNodes.push(sourceNode as OscillatorNode);
       } else {
         sourceNode = this.createNoiseSource(this.audioContext, source as NoiseSource);
@@ -68,7 +83,7 @@ export class Synth {
     return gainNode;
   }
 
-  private createOcillatorSource(audioContext: AudioContext, source: OcillatorSource) {
+  private createOcillatorSource(audioContext: AudioContext, source: OcillatorSource): OscillatorNode {
     const sourceNode = this.sourceService.createOcillatorSource(audioContext, source, 440);
     sourceNode.start();
     return sourceNode;

@@ -7,7 +7,7 @@ import { NoiseService } from './noise.service';
 
 @Injectable()
 export class SourceService {
-  public sources = new BehaviorSubject<Source[]>([]);
+  public sources$ = new BehaviorSubject<Source[]>([]);
 
   constructor(private noiseService: NoiseService) {
   }
