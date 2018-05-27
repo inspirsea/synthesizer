@@ -43,11 +43,12 @@ export class FaderComponent implements AfterViewInit {
     );
 
     this.mouseDown$.subscribe(result => {
-      this.delta = this.value;
+      this.delta = 0;
     });
 
     this.valueChange$.subscribe(result => {
       const changed = result - this.delta;
+      console.log('Changed: ', changed, result, this.delta);
 
       this.delta = result;
 
@@ -58,8 +59,8 @@ export class FaderComponent implements AfterViewInit {
   public changeValue(change: number): void {
     this.value += change;
 
-    if (this.value > 140) {
-      this.value = 140;
+    if (this.value > 134) {
+      this.value = 134;
     } else if (this.value < 0) {
       this.value = 0;
     }
