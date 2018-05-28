@@ -1,0 +1,41 @@
+fader {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+
+  .fader-container {
+    display: flex;
+    flex: 0 0 auto;
+    width: 48px;
+    height: 164px;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .fader-background {
+    display: flex;
+    flex: 1 0 auto;
+    width: 48px;
+    height: 148px;
+    background-image: url('./assets/svg/Fader_Background.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .fader-knob {
+    background-image: url('./assets/svg/Fader_knob.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 22px;
+    height: 14px;
+    display: flex;
+    flex: 1 0 auto;
+  }
+
+  .fader-label {
+    width: 100%;
+    margin-top: 4px;
+    text-align: center;
+    font-size: 9px;
+  }
+}

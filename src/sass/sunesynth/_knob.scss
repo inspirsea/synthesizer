@@ -1,0 +1,64 @@
+knob {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+
+  .knob-container {
+    width: auto;
+    height: 96px;
+  }
+
+  .knob-background {
+    display: flex;
+    flex: 0 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .markers11 {
+    background-image: url('./assets/svg/Markers_11.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 64px;
+    height: 64px;
+  }
+
+  .markers10 {
+    background-image: url('./assets/svg/Markers_10.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 64px;
+    height: 64px;
+  }
+
+  .waveshapes {
+    background-image: url('./assets/svg/Waveshapes.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 82px;
+    height: 74px;
+
+    .knob {
+      margin-top: 18px;
+    }
+  }
+
+  .knob {
+    display: flex;
+    flex: 1 auto;
+    margin-top: 4px;
+    width: 42px;
+    height: 42px;
+    background-image: url('./assets/svg/Knob.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-145deg);
+  }
+
+  .knob-label {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}

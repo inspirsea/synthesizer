@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { KeyboardComponent } from './component/keyboard/keyboard.component';
@@ -18,6 +19,7 @@ import { AudioService } from './service/audio.service';
 import { NoiseComponent } from './component/noise/noise.component';
 import { LfoComponent } from './component/lfo/lfo.component';
 import { LfoService } from './service/lfo.service';
+import { ExperimentalComponent } from './component/experimental/experimental.component';
 
 
 @NgModule({
@@ -30,11 +32,22 @@ import { LfoService } from './service/lfo.service';
     SourceComponent,
     SynthesizerComponent,
     NoiseComponent,
-    LfoComponent
+    LfoComponent,
+    ExperimentalComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: ExperimentalComponent
+      },
+      {
+        path: 'sunesynth',
+        loadChildren: './module/sunesynth/sunesynth.module#SunesynthModule'
+      }
+    ])
   ],
   providers: [
     SynthService,

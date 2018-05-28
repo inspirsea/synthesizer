@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 62 37" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-1,-135)">
+        <g transform="matrix(1.06163,0,0,0.982301,-189,9.25916)">
+            <g id="Waveshapes" transform="matrix(0.466667,0,0,0.466667,116.016,47.2943)">
+                <g transform="matrix(1.15725,0,0,1.25071,-170.694,-36.4663)">
+                    <path d="M350,230L370,220L370,230" style="fill:none;stroke:rgb(175,174,176);stroke-width:1.74px;"/>
+                </g>
+                <g transform="matrix(1.15725,0,0,1.25071,-128.979,-100.02)">
+                    <path d="M300,225L300,230L310,230L310,220L320,220L320,225" style="fill:none;stroke:rgb(175,174,176);stroke-width:1.74px;"/>
+                </g>
+                <g transform="matrix(1.15725,0,0,1.25071,-193.57,-125.034)">
+                    <path d="M300,250L310,240L320,250" style="fill:none;stroke:rgb(175,174,176);stroke-width:1.74px;"/>
+                </g>
+                <g transform="matrix(1.15725,0,0,1.2252,-325.443,-55.1791)">
+                    <path d="M400,245C400,245 400.971,250.711 405,250C410.756,248.984 410.328,241.227 415,240C419.442,238.833 420,245 420,245" style="fill:none;stroke:rgb(175,174,176);stroke-width:1.76px;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
