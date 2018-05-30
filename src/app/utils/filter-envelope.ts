@@ -1,33 +1,40 @@
-// import { of, Subscription } from 'rxjs';
-// import { delay } from 'rxjs/operators';
-// import { ADSR } from '../model/ADSR';
-// import { Envelope } from './envelope';
-// import { FilterMetadata } from '../model/filter-metadata';
+import { of, Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { ADSR } from '../model/ADSR';
+import { Envelope } from './envelope';
 
-// export class FilterEnvelope extends Envelope {
+export class FilterEnvelope extends Envelope {
 
-//   constructor(audioContext: AudioContext, adsr: ADSR, private filter: BiquadFilterNode, private metadata: FilterMetadata) {
-//     super(audioContext, adsr);
-//   }
+  constructor(audioContext: AudioContext, adsr: ADSR, private nodes: BiquadFilterNode[]) {
+    super(audioContext, adsr);
+    for (const node of this.nodes) {
+      node.frequency.setTargetAtTime(this.adsr.startLevel, this.audioContext.currentTime, this.adsr.attackTime);
+    }
+  }
 
-//   public attack() {
-//     super.attack();
-//   }
+  public attack() {
+    super.attack();
+  }
 
-//   public release() {
-//     super.release();
-//   }
+  public release() {
+    super.release();
+  }
 
-//   protected setAttack() {
-//     this.filter.frequency.setTargetAtTime(this.metadata.frequency.start, this.audioContext.currentTime, 0.01);
-//     this.filter.frequency.setTargetAtTime(this.metadata.frequency.attack, this.audioContext.currentTime, this.adsr.attackTime);
-//   }
+  protected setAttack() {
+    for (const node of this.nodes) {
+      node.frequency.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+    }
+  }
 
-//   protected setDecay() {
-//     this.filter.frequency.setTargetAtTime(this.metadata.frequency.sustain, this.audioContext.currentTime, this.adsr.decayTime);
-//   }
+  protected setDecay() {
+    for (const node of this.nodes) {
+      node.frequency.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
+    }
+  }
 
-//   protected setRelease() {
-//     this.filter.frequency.setTargetAtTime(this.metadata.frequency.start, this.audioContext.currentTime, this.adsr.releaseTime);
-//   }
-// }
+  protected setRelease() {
+    for (const node of this.nodes) {
+      node.frequency.setTargetAtTime(this.adsr.startLevel, this.audioContext.currentTime, this.adsr.releaseTime);
+    }
+  }
+}

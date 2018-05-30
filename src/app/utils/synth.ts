@@ -6,11 +6,13 @@ import { FilterService } from '../service/filter.service';
 import { NoiseSource } from '../model/noise-source';
 import { LfoService } from '../service/lfo.service';
 import { Source } from '../model/source';
+import { FilterEnvelope } from './filter-envelope';
+import { Envelope } from './envelope';
 
 export class Synth {
 
   public usedBy = 0;
-  private volumeEnvelope: VolumeEnvelope;
+  private envelopes: Envelope[];
   private sourceNodes: OscillatorNode[] = [];
 
   constructor(
@@ -20,25 +22,29 @@ export class Synth {
     private lfoService: LfoService,
     private adsr: ADSR) {
     this.sourceService.sources$.subscribe(it => {
-      this.volumeEnvelope = this.createSynth();
+      this.envelopes = this.createSynth();
     });
 
     this.filterService.filter$.subscribe(it => {
-      this.volumeEnvelope = this.createSynth();
+      this.envelopes = this.createSynth();
     });
 
     this.lfoService.lfo$.subscribe(it => {
-      this.volumeEnvelope = this.createSynth();
+      this.envelopes = this.createSynth();
     });
   }
 
   public attack(frequency: number) {
     this.setFrequency(frequency, this.audioContext);
-    this.volumeEnvelope.attack();
+    for (const envelope of this.envelopes) {
+      envelope.attack();
+    }
   }
 
   public release() {
-    this.volumeEnvelope.release();
+    for (const envelope of this.envelopes) {
+      envelope.release();
+    }
   }
 
   private setFrequency(frequency: number, audioContext: AudioContext) {
@@ -47,10 +53,12 @@ export class Synth {
     }
   }
 
-  private createSynth(): VolumeEnvelope {
+  private createSynth(): Envelope[] {
     this.removeSourceNodes();
 
     const gainNodes = [];
+    const filterNodes = [];
+    const envelopes = [];
     const sources = this.sourceService.sources$.getValue();
     const lfos = this.lfoService.lfo$.getValue();
 
@@ -69,12 +77,19 @@ export class Synth {
         sourceNode = this.createNoiseSource(this.audioContext, source as NoiseSource);
       }
 
-      this.filterService.connect(sourceNode, gainNode, this.audioContext);
+      filterNodes.push(this.filterService.connect(sourceNode, gainNode, this.audioContext));
       gainNode.connect(this.audioContext.destination);
       gainNodes.push(gainNode);
     }
 
-    return new VolumeEnvelope(this.audioContext, this.adsr, gainNodes);
+    const filterMetaData = this.filterService.filter$.getValue();
+    if (filterMetaData != null) {
+      envelopes.push(new FilterEnvelope(this.audioContext, filterMetaData.adsr, filterNodes));
+    }
+
+    envelopes.push(new VolumeEnvelope(this.audioContext, this.adsr, gainNodes));
+
+    return envelopes;
   }
 
   private createGain(audioContext: AudioContext) {
