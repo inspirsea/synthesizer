@@ -1,12 +1,20 @@
-import { Component, Input, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, Observable } from 'rxjs';
 import { flatMap, map, switchMap, take, takeUntil, takeLast } from 'rxjs/operators';
 
 @Component({
   selector: 'fader',
-  templateUrl: './fader.component.html'
+  templateUrl: './fader.component.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FaderComponent),
+      multi: true
+    }
+  ]
 })
-export class FaderComponent implements AfterViewInit {
+export class FaderComponent implements AfterViewInit, ControlValueAccessor {
   @Input() label: string;
 
   private mouseDown$: Observable<MouseEvent>;
@@ -15,8 +23,15 @@ export class FaderComponent implements AfterViewInit {
   private valueChange$: Observable<number>;
 
   private delta = 0;
+  private min = 0;
+  private max = 134;
+  private value = 0;
 
-  public value = 0;
+  public position = 0;
+  public disabled = false;
+
+  public onChange = (value: number) => {};
+  public onTouched = () => {};
 
   constructor(private el: ElementRef) { }
 
@@ -33,12 +48,12 @@ export class FaderComponent implements AfterViewInit {
           map((moveEvent: MouseEvent) => {
             moveEvent.preventDefault();
 
-            let dy = moveEvent.clientY - event.clientY;
+            const dy = moveEvent.clientY - event.clientY;
 
             return dy;
           }),
           takeUntil(this.mouseUp$)
-        )
+        );
       })
     );
 
@@ -48,21 +63,57 @@ export class FaderComponent implements AfterViewInit {
 
     this.valueChange$.subscribe(result => {
       const changed = result - this.delta;
-      console.log('Changed: ', changed, result, this.delta);
 
       this.delta = result;
 
-      this.changeValue(changed);
+      this.changePosition(changed);
     });
   }
 
-  public changeValue(change: number): void {
-    this.value += change;
-
-    if (this.value > 134) {
-      this.value = 134;
-    } else if (this.value < 0) {
-      this.value = 0;
+  public writeValue(value: number): void {
+    if (value === undefined) {
+      value = 0;
     }
+
+    this.onChange(value);
+    this.changeValue(value);
+    console.log('Writing value:', value);
+  }
+
+  public registerOnChange(fn: (value: number) => void): void {
+    this.onChange = fn;
+  }
+
+  public registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  public changePosition(change: number): void {
+    this.position += change;
+
+    if (this.position > this.max) {
+      this.position = this.max;
+    } else if (this.position < this.min) {
+      this.position = this.min;
+    }
+
+    // calculate value
+    const float = this.position / this.max;
+
+    this.value = 127 - (float * 127);
+    this.writeValue(this.value);
+  }
+
+  public changeValue(change: number): void {
+    this.value = change;
+
+    // Calculate position
+    const float = this.value / 127;
+
+    this.position = this.max - (float * this.max);
   }
 }

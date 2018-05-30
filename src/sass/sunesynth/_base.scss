@@ -100,6 +100,13 @@ sunesynth {
     grid-row-end: row4;
   }
 
+  .keyboard {
+    grid-column-start: col3;
+    grid-column-end: gutter-right;
+    grid-row-start: row4;
+    grid-row-end: gutter-bottom;
+  }
+
   .panel {
     border: 1px solid $light;
     margin: 2px;

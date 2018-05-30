@@ -9,9 +9,9 @@
     </header>
 
     <div class="flex flex-column flex-space-between" style="height: 100%;">
-      <knob [label]="'shape'" [type]="'shapes'"></knob>
-      <knob [label]="'freq'" [type]="'balanced'"></knob>
-      <knob [label]="'fine'" [type]="'balanced'"></knob>
+      <knob [(ngModel)]="osc1.type" [label]="'shape'" [type]="'shapes'"></knob>
+      <knob [(ngModel)]="osc1.freq" [label]="'freq'" [type]="'balanced'"></knob>
+      <knob [(ngModel)]="osc1.fine" [label]="'fine'" [type]="'balanced'"></knob>
     </div>
   </section>
 
@@ -21,9 +21,9 @@
     </header>
 
     <div class="flex flex-column flex-space-between" style="height: 100%;">
-      <knob [label]="'shape'" [type]="'shapes'"></knob>
-      <knob [label]="'freq'" [type]="'balanced'"></knob>
-      <knob [label]="'fine'" [type]="'balanced'"></knob>
+        <knob [(ngModel)]="osc2.type" [label]="'shape'" [type]="'shapes'"></knob>
+        <knob [(ngModel)]="osc2.freq" [label]="'freq'" [type]="'balanced'"></knob>
+        <knob [(ngModel)]="osc2.fine" [label]="'fine'" [type]="'balanced'"></knob>
     </div>
   </section>
 
@@ -65,10 +65,10 @@
     </header>
 
     <div class="flex flex-row flex-space-between flex-align-stretch" style="padding-top: 10px;">
-      <fader [label]="'Attack'"></fader>
-      <fader [label]="'Delay'"></fader>
-      <fader [label]="'Sustain'"></fader>
-      <fader [label]="'Release'"></fader>
+      <fader [(ngModel)]="ampEnv.attackTime" [label]="'Attack'"></fader>
+      <fader [(ngModel)]="ampEnv.delayTime" [label]="'Delay'"></fader>
+      <fader [(ngModel)]="ampEnv.sustainLevel" [label]="'Sustain'"></fader>
+      <fader [(ngModel)]="ampEnv.releaseTime" [label]="'Release'"></fader>
     </div>
   </section>
 
@@ -78,10 +78,30 @@
     </header>
 
     <div class="flex flex-row flex-space-between flex-align-stretch" style="padding-top: 10px;">
-      <fader [label]="'Attack'"></fader>
-      <fader [label]="'Delay'"></fader>
-      <fader [label]="'Sustain'"></fader>
-      <fader [label]="'Release'"></fader>
+      <fader [(ngModel)]="ampEnv.attackTime" [label]="'Attack'"></fader>
+      <fader [(ngModel)]="ampEnv.delayTime" [label]="'Delay'"></fader>
+      <fader [(ngModel)]="ampEnv.sustainLevel" [label]="'Sustain'"></fader>
+      <fader [(ngModel)]="ampEnv.releaseTime" [label]="'Release'"></fader>
+    </div>
+  </section>
+
+  <section class="keyboard">
+    <div class="container">
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'whole'"></key>
     </div>
   </section>
 </main>
