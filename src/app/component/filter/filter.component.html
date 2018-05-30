@@ -2,11 +2,18 @@
 
 </div>
 
-<input type="number" [(ngModel)]="cutoffFrequency">
 <input type="number" [(ngModel)]="peak">
+
+<input [(ngModel)]="adsr.attackTime" type="number">
+<input [(ngModel)]="adsr.decayTime" type="number">
+<input [(ngModel)]="adsr.startLevel" type="number">
+<input [(ngModel)]="adsr.sustainLevel" type="number">
+<input [(ngModel)]="adsr.releaseTime" type="number">
+
 <select [(ngModel)]="selectedType">
   <option [value]="filter" *ngFor="let filter of filterTypes">
     {{filter}}
   </option>
 </select>
-<button (click)="addFilter()">add</button>
+
+<button (click)="changeFilter()">add</button>

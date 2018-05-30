@@ -19,7 +19,6 @@ export class VolumeEnvelope extends Envelope {
 
   protected setAttack() {
     for (const node of this.gainNodes) {
-      node.gain.setTargetAtTime(0, this.audioContext.currentTime, 0.01);
       node.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
     }
   }

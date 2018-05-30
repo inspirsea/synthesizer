@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../service/filter.service';
 import { AudioService } from '../../service/audio.service';
+import { ADSR } from '../../model/ADSR';
 
 @Component({
   selector: 'filter',
@@ -12,6 +13,14 @@ export class FilterComponent implements OnInit {
   public cutoffFrequency = 0;
   public peak = 0;
   public selectedType: BiquadFilterType = 'lowpass';
+  public adsr: ADSR = {
+    attackTime: 0.1,
+    decayTime: 0.1,
+    releaseTime: 0.1,
+    sustainLevel: 1000,
+    startLevel: 200
+  };
+
   public filterTypes = [
     'lowpass',
     'highpass',
@@ -29,12 +38,13 @@ export class FilterComponent implements OnInit {
   ngOnInit() {
   }
 
-  public addFilter() {
+  public changeFilter() {
     this.filterService.filter$.next({
       type: this.selectedType,
-      frequency: this.cutoffFrequency,
+      frequency: this.adsr.startLevel,
       Q: this.peak,
-      gain: 0
+      gain: 0,
+      adsr: this.adsr
     });
   }
 }
