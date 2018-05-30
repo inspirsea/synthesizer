@@ -7,6 +7,12 @@ import { MainViewComponent } from './component/view/main-view.component';
 import { KnobComponent } from './component/knob/knob.component';
 import { FaderComponent } from './component/fader/fader.component';
 import { KeyComponent } from './component/key/key.component';
+import { OscComponent } from './component/osc/osc.component';
+import { FilterComponent } from './component/filter/filter.component';
+import { AmpEnvelopeComponent } from './component/ampenv/ampenv.component';
+import { FilterEnvelopeComponent } from './component/filterenv/filterenv.component';
+import { LfoComponent } from './component/lfo/lfo.component';
+import { VolumeComponent } from './component/volume/volume.component';
 
 @NgModule({
   imports: [
@@ -23,7 +29,13 @@ import { KeyComponent } from './component/key/key.component';
     MainViewComponent,
     KnobComponent,
     FaderComponent,
-    KeyComponent
+    KeyComponent,
+    OscComponent,
+    FilterComponent,
+    AmpEnvelopeComponent,
+    FilterEnvelopeComponent,
+    LfoComponent,
+    VolumeComponent
   ],
   providers: [
 

@@ -8,11 +8,7 @@
       <h3>OSC 1</h3>
     </header>
 
-    <div class="flex flex-column flex-space-between" style="height: 100%;">
-      <knob [(ngModel)]="osc1.type" [label]="'shape'" [type]="'shapes'"></knob>
-      <knob [(ngModel)]="osc1.freq" [label]="'freq'" [type]="'balanced'"></knob>
-      <knob [(ngModel)]="osc1.fine" [label]="'fine'" [type]="'balanced'"></knob>
-    </div>
+    <osc></osc>
   </section>
 
   <section class="osc2 panel">
@@ -20,10 +16,17 @@
       <h3>OSC 2</h3>
     </header>
 
-    <div class="flex flex-column flex-space-between" style="height: 100%;">
-        <knob [(ngModel)]="osc2.type" [label]="'shape'" [type]="'shapes'"></knob>
-        <knob [(ngModel)]="osc2.freq" [label]="'freq'" [type]="'balanced'"></knob>
-        <knob [(ngModel)]="osc2.fine" [label]="'fine'" [type]="'balanced'"></knob>
+    <osc></osc>
+  </section>
+
+  <section class="noise panel">
+    <header>
+      <h3>NOISE</h3>
+    </header>
+
+    <div class="flex flex-row flex-space-between">
+      <knob [(ngModel)]="cutoffValue" (ngModelChange)="updateCutoff()" [label]="'noise'" [type]="'balanced'"></knob>
+      <knob [(ngModel)]="resValue" (ngModelChange)="updateRes()" [label]="'mix'" [type]="'balanced'"></knob>
     </div>
   </section>
 
@@ -32,10 +35,7 @@
       <h3>FILTER</h3>
     </header>
 
-    <div class="flex flex-row flex-space-between">
-      <knob [label]="'cutoff'" [type]="'balanced'"></knob>
-      <knob [label]="'res'" [type]="'balanced'"></knob>
-    </div>
+    <filter></filter>
   </section>
 
   <section class="lfo panel">
@@ -43,10 +43,7 @@
       <h3>LFO</h3>
     </header>
 
-    <div class="flex flex-row flex-space-between">
-      <knob [label]="'rate'" [type]="'balanced'"></knob>
-      <knob [label]="'shape'" [type]="'shapes'"></knob>
-    </div>
+    <lfo></lfo>
   </section>
 
   <section class="amp panel">
@@ -54,9 +51,7 @@
       <h3>AMP</h3>
     </header>
 
-    <div class="flex flex-row flex-space-between">
-      <knob [label]="'Volume'" [type]="'balanced'"></knob>
-    </div>
+    <volume></volume>
   </section>
 
   <section class="amp-env panel">
@@ -64,12 +59,7 @@
       <h3>AMP ENV</h3>
     </header>
 
-    <div class="flex flex-row flex-space-between flex-align-stretch" style="padding-top: 10px;">
-      <fader [(ngModel)]="ampEnv.attackTime" [label]="'Attack'"></fader>
-      <fader [(ngModel)]="ampEnv.delayTime" [label]="'Delay'"></fader>
-      <fader [(ngModel)]="ampEnv.sustainLevel" [label]="'Sustain'"></fader>
-      <fader [(ngModel)]="ampEnv.releaseTime" [label]="'Release'"></fader>
-    </div>
+    <amp-env></amp-env>
   </section>
 
   <section class="filter-env panel">
@@ -77,12 +67,7 @@
       <h3>FILTER ENV</h3>
     </header>
 
-    <div class="flex flex-row flex-space-between flex-align-stretch" style="padding-top: 10px;">
-      <fader [(ngModel)]="ampEnv.attackTime" [label]="'Attack'"></fader>
-      <fader [(ngModel)]="ampEnv.delayTime" [label]="'Delay'"></fader>
-      <fader [(ngModel)]="ampEnv.sustainLevel" [label]="'Sustain'"></fader>
-      <fader [(ngModel)]="ampEnv.releaseTime" [label]="'Release'"></fader>
-    </div>
+    <filter-env></filter-env>
   </section>
 
   <section class="keyboard">

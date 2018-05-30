@@ -44,6 +44,10 @@ export class SynthService {
     }
   }
 
+  public setADSR(adsr: ADSR): void {
+    this.adsr$.next(adsr);
+  }
+
   public getSynth(id: number) {
     const synth = this.synths[this.count++];
     synth.usedBy = id;

@@ -1,0 +1,6 @@
+<div class="flex flex-column flex-space-between" style="height: 100%;">
+  <knob [(ngModel)]="waveShape" (ngModelChange)="update()" [label]="'shape'" [type]="'shapes'"></knob>
+  <knob [(ngModel)]="frequencyValue" [label]="'freq'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="fineTuneValue" [label]="'fine'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="mixValue" [label]="'mix'" [type]="'balanced'"></knob>
+</div>

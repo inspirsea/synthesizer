@@ -20,15 +20,17 @@ sunesynth {
       [col5] 11%
       [col6] 11%
       [col7] 11%
-      [col8] 11%
+      [col8] 5.5%
+      [col8] 5.5%
       [gutter-right] 20px;
     grid-template-rows:
       [gutter-top] 20px
-      [head] 50px
+      [head] 40px
       [row1] 20%
       [row2] 20%
       [row3] 20%
-      [row4] auto
+      [row4] 8%
+      [row5] auto
       [gutter-bottom] 20px;
     width: 800px;
     height: 600px;
@@ -55,14 +57,21 @@ sunesynth {
     grid-column-start: col1;
     grid-column-end: col2;
     grid-row-start: row1;
-    grid-row-end: row4;
+    grid-row-end: row5;
   }
 
   .osc2 {
     grid-column-start: col2;
     grid-column-end: col3;
     grid-row-start: row1;
-    grid-row-end: row4;
+    grid-row-end: row5;
+  }
+
+  .noise {
+    grid-column-start: col1;
+    grid-column-end: col3;
+    grid-row-start: row5;
+    grid-row-end: gutter-bottom;
   }
 
   .filter {
@@ -74,13 +83,13 @@ sunesynth {
 
   .lfo {
     grid-column-start: col5;
-    grid-column-end: col7;
+    grid-column-end: col8;
     grid-row-start: row1;
     grid-row-end: row2;
   }
 
   .amp {
-    grid-column-start: col7;
+    grid-column-start: col8;
     grid-column-end: gutter-right;
     grid-row-start: row1;
     grid-row-end: row2;

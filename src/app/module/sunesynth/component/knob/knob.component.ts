@@ -136,18 +136,18 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
       }
 
       this.deltaStop = 0;
-    }
 
-    if (this.value < 0) {
-      this.value = 0;
+      if (this.value < 0) {
+        this.value = 0;
+      }
+  
+      if (this.value > 3) {
+        this.value = 3;
+      }
+  
+      this.angle = this.shapeStops[this.value];
+      this.writeValue(this.value);
     }
-
-    if (this.value > 3) {
-      this.value = 3;
-    }
-
-    this.angle = this.shapeStops[this.value];
-    this.writeValue(this.value);
   }
 
   public changePositionBalanced(change: number): void {

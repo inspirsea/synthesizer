@@ -1,0 +1,4 @@
+<div class="flex flex-row flex-space-between">
+  <knob [(ngModel)]="rateValue" (ngModelChange)="updateRate()" [label]="'rate'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="shapeValue" (ngModelChange)="updateShape()" [label]="'shape'" [type]="'shapes'"></knob>
+</div>
