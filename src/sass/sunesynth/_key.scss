@@ -1,0 +1,61 @@
+key {
+  width: 30px;
+  height: 150px;
+
+  .key {
+    height: 158px;
+    width: 30px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .key-right {
+    background-image: url('./assets/svg/Key_White_Right_Off.svg');
+
+    &:active {
+      background-image: url('./assets/svg/Key_White_Right_On.svg');
+    }
+  }
+
+  .key-middle {
+    background-image: url('./assets/svg/Key_White_Middle_Off.svg');
+
+    &:active {
+      background-image: url('./assets/svg/Key_White_Middle_On.svg');
+    }
+  }
+
+  .key-left {
+    background-image: url('./assets/svg/Key_White_Left_Off.svg');
+
+    &:active {
+      background-image: url('./assets/svg/Key_White_Left_On.svg');
+    }
+  }
+
+  .key-whole {
+    background-image: url('./assets/svg/Key_White_Whole_Off.svg');
+
+    &:active {
+      background-image: url('./assets/svg/Key_White_Whole_On.svg');
+    }
+  }
+
+  .key-minor {
+    height: 50px;
+    background-image: url('./assets/svg/Key_Black_Off.svg');
+
+    &:active {
+      background-image: url('./assets/svg/Key_Black_On.svg');
+    }
+  }
+}
+
+.keyboard {
+  .container {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+  }
+}

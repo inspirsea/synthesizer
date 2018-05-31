@@ -1,0 +1,6 @@
+<div class="flex flex-row flex-space-between flex-align-stretch" style="padding-top: 10px;">
+  <fader [(ngModel)]="attackValue" (ngModelChange)="updateADSR()" [label]="'Attack'"></fader>
+  <fader [(ngModel)]="delayValue" (ngModelChange)="updateADSR()" [label]="'Delay'"></fader>
+  <fader [(ngModel)]="sustainValue" (ngModelChange)="updateADSR()" [label]="'Sustain'"></fader>
+  <fader [(ngModel)]="releaseValue" (ngModelChange)="updateADSR()" [label]="'Release'"></fader>
+</div>

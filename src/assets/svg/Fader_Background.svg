@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 38 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-141,-4)">
+        <g transform="matrix(0.796223,0,0,0.736726,-8.73938,-29.6007)">
+            <g id="Fader-Background" serif:id="Fader Background">
+                <g transform="matrix(1.25593,-0,-0,1.35736,188.062,45.6081)">
+                    <use xlink:href="#_Image1" x="4.558" y="0" width="28.818px" height="120px" transform="matrix(0.993707,0,0,1,0,0)"/>
+                </g>
+                <g transform="matrix(0.941947,0,0,1.01802,2.11938,-0.131834)">
+                    <rect x="220.541" y="50.764" width="4.5" height="148.333" style="fill:rgb(3,3,3);"/>
+                </g>
+                <g id="Levels">
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,23.322L75.733,23.322L75.733,24.858L72,24.858L72,23.322ZM119.889,24.858L115.933,24.858L115.933,23.322L119.889,23.322L119.889,24.858Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,39.399L75.733,39.399L75.733,40.73L72,40.73L72,39.399ZM119.889,40.73L115.933,40.73L115.933,39.399L119.889,39.399L119.889,40.73Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,55.373L75.733,55.373L75.733,56.807L72,56.807L72,55.373ZM119.889,56.807L115.933,56.807L115.933,55.373L119.889,55.373L119.889,56.807Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,71.296L75.733,71.296L75.733,72.781L72,72.781L72,71.296ZM120,72.781L115.933,72.781L115.933,71.296L120,71.296L120,72.781Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M71.889,87.373L75.733,87.373L75.733,88.807L71.889,88.807L71.889,87.373ZM120,88.807L115.933,88.807L115.933,87.373L120,87.373L120,88.807Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,103.348L75.733,103.348L75.733,104.679L72,104.679L72,103.348ZM120,104.679L115.933,104.679L115.933,103.348L120,103.348L120,104.679Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,119.271L75.733,119.271L75.733,120.807L72,120.807L72,119.271ZM120,120.807L115.933,120.807L115.933,119.271L120,119.271L120,120.807Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M72,135.399L75.733,135.399L75.733,136.935L72,136.935L72,135.399ZM119.889,136.935L115.933,136.935L115.933,135.399L119.889,135.399L119.889,136.935Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M71.889,151.322L75.733,151.322L75.733,152.704L71.889,152.704L71.889,151.322ZM119.889,152.704L115.933,152.704L115.933,151.322L119.889,151.322L119.889,152.704Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                    <g transform="matrix(0.941947,0,0,1.01802,121.55,29.3199)">
+                        <path d="M71.889,167.399L75.733,167.399L75.733,168.73L71.889,168.73L71.889,167.399ZM120,168.73L115.933,168.73L115.933,167.399L120,167.399L120,168.73Z" style="fill:rgb(175,174,176);"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <image id="_Image1" width="29px" height="120px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAB4CAYAAAAOqvnmAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABDklEQVRoge3bO04EMRCE4b96zGMFgkMg7n8gxCFAEMDudhF4B1IkBhKqAstRf2o7LgGcn108jLNxVypJnPJ5+UE8T0O7fdgfHt/3b/e6vNjtaqnXm+tbVRVSoS28lTXYTXfz/PLkPvbVkDQWlaqKZVl+CZ0DF5UsjwGAhNYtS2iTpz1Fhi5UZt1mwPw9TRshtOmqE14NgNpu+vcTNGjQoEGDBg0aNGjQoEGDBg0aNGjQoEGDBg0aNGjQoEGDBg0aNGjQoEGDBg0aNGjQoEGDBg0a9D+gA2alxcwWD/JaXdokxrMdxNfY2QyycTeWoGvCW6GnDpS7T1vBsH04ut3dApD8a8Wro9u2D4K/r5h9AOjjdBwYh7fDAAAAAElFTkSuQmCC"/>
+    </defs>
+</svg>

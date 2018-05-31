@@ -1,0 +1,4 @@
+<div class="flex flex-row flex-space-between">
+  <knob [(ngModel)]="cutoffValue" (ngModelChange)="updateCutoff()" [label]="'cutoff'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="resValue" (ngModelChange)="updateRes()" [label]="'res'" [type]="'balanced'"></knob>
+</div>

@@ -9,7 +9,6 @@ import { ADSR } from '../../model/ADSR';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
-
   public cutoffFrequency = 0;
   public peak = 0;
   public selectedType: BiquadFilterType = 'lowpass';

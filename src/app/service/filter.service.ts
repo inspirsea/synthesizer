@@ -24,6 +24,34 @@ export class FilterService {
     return filter;
   }
 
+  public setADSR(adsr: ADSR): void {
+    const filter = this.filter$.getValue();
+
+    filter.adsr = adsr;
+    this.filter$.next(filter);
+  }
+
+  public setFilterType(type: BiquadFilterType): void {
+    const filter = this.filter$.getValue();
+
+    filter.type = type;
+    this.filter$.next(filter);
+  }
+
+  public setCutoffFrequency(frequency: number): void {
+    const filter = this.filter$.getValue();
+
+    filter.frequency = frequency;
+    this.filter$.next(filter);
+  }
+
+  public setQ(q: number): void {
+    const filter = this.filter$.getValue();
+
+    filter.Q = q;
+    this.filter$.next(filter);
+  }
+
   private createFilter(audioContext: AudioContext, metaData: FilterMetadata) {
     const filter = audioContext.createBiquadFilter();
     filter.type = metaData.type;
@@ -33,5 +61,4 @@ export class FilterService {
 
     return filter;
   }
-
 }

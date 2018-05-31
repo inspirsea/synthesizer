@@ -1,0 +1,92 @@
+<main class="container">
+  <header>
+    <h1>SUNESYNTH</h1>
+  </header>
+
+  <section class="osc1 panel">
+    <header>
+      <h3>OSC 1</h3>
+    </header>
+
+    <osc></osc>
+  </section>
+
+  <section class="osc2 panel">
+    <header>
+      <h3>OSC 2</h3>
+    </header>
+
+    <osc></osc>
+  </section>
+
+  <section class="noise panel">
+    <header>
+      <h3>NOISE</h3>
+    </header>
+
+    <div class="flex flex-row flex-space-between">
+      <knob [(ngModel)]="cutoffValue" (ngModelChange)="updateCutoff()" [label]="'noise'" [type]="'balanced'"></knob>
+      <knob [(ngModel)]="resValue" (ngModelChange)="updateRes()" [label]="'mix'" [type]="'balanced'"></knob>
+    </div>
+  </section>
+
+  <section class="filter panel">
+    <header>
+      <h3>FILTER</h3>
+    </header>
+
+    <filter></filter>
+  </section>
+
+  <section class="lfo panel">
+    <header>
+      <h3>LFO</h3>
+    </header>
+
+    <lfo></lfo>
+  </section>
+
+  <section class="amp panel">
+    <header>
+      <h3>AMP</h3>
+    </header>
+
+    <volume></volume>
+  </section>
+
+  <section class="amp-env panel">
+    <header>
+      <h3>AMP ENV</h3>
+    </header>
+
+    <amp-env></amp-env>
+  </section>
+
+  <section class="filter-env panel">
+    <header>
+      <h3>FILTER ENV</h3>
+    </header>
+
+    <filter-env></filter-env>
+  </section>
+
+  <section class="keyboard">
+    <div class="container">
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'left'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'middle'"></key>
+      <key [type]="'right'"></key>
+      <key [type]="'whole'"></key>
+    </div>
+  </section>
+</main>

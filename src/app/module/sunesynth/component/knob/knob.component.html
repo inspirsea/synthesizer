@@ -1,0 +1,13 @@
+<div class="knob-container">
+  <div class="knob-background"
+    [class.markers10]="type == 'normal'"
+    [class.markers11]="type == 'balanced'"
+    [class.waveshapes]="type == 'shapes'">
+    <div class="knob" [style.transform]="'rotate(' + angle + 'deg)'">
+
+    </div>
+  </div>
+  <div *ngIf="label" class="knob-label">
+    {{ label }}
+  </div>
+</div>
