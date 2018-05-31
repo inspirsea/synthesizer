@@ -14,6 +14,6 @@ export class KeyboardComponent implements OnInit {
   ngOnInit() {
     const notes = this.freq.getFrequencyMapping(0, 0);
 
-    this.notes = notes.slice(36, 61);
+    this.notes = notes.slice(36, 62);
   }
 }
