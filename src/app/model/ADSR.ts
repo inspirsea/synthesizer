@@ -3,5 +3,4 @@ export interface ADSR {
   decayTime: number;
   sustainLevel: number;
   releaseTime: number;
-  startLevel?: number;
 }

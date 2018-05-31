@@ -27,19 +27,11 @@ export class OscComponent implements OnInit {
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
 
   ngOnInit() {
-    const sources = this.sourceService.sources$.getValue();
-    sources.push(this.source);
-    this.sourceService.sources$.next(sources);
+    this.sourceService.addSource(this.source);
   }
 
   public update(): void {
-    console.log('Update osc', this.waveShape);
     this.source.type = this.waveShapes[this.waveShape];
-
-    this.updateSource();
-  }
-
-  public updateSource(): void {
-    this.sourceService.sources$.next(this.sourceService.sources$.getValue());
+    this.sourceService.updateSource();
   }
 }

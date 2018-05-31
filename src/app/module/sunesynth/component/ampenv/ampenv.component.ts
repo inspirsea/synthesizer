@@ -22,6 +22,6 @@ export class AmpEnvelopeComponent {
       releaseTime: (this.releaseValue / 127) * 4
     };
 
-    this.synthService.setADSR(adsr);
+    this.synthService.updateADSR(adsr);
   }
 }

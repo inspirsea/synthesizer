@@ -7,7 +7,7 @@ import { FilterMetadata } from '../model/filter-metadata';
 @Injectable()
 export class FilterService {
 
-  public filter$ = new BehaviorSubject<FilterMetadata>(null);
+  private filter$ = new BehaviorSubject<FilterMetadata>(null);
 
   public connect(startNode: AudioNode, endNode: AudioNode, audioContext: AudioContext) {
     let currentNode = startNode;
@@ -24,32 +24,16 @@ export class FilterService {
     return filter;
   }
 
-  public setADSR(adsr: ADSR): void {
-    const filter = this.filter$.getValue();
-
-    filter.adsr = adsr;
-    this.filter$.next(filter);
+  public addFilter(filterData: FilterMetadata) {
+    this.filter$.next(filterData);
   }
 
-  public setFilterType(type: BiquadFilterType): void {
-    const filter = this.filter$.getValue();
-
-    filter.type = type;
-    this.filter$.next(filter);
+  public updateFilter() {
+    this.filter$.next(this.filter$.getValue());
   }
 
-  public setCutoffFrequency(frequency: number): void {
-    const filter = this.filter$.getValue();
-
-    filter.frequency = frequency;
-    this.filter$.next(filter);
-  }
-
-  public setQ(q: number): void {
-    const filter = this.filter$.getValue();
-
-    filter.Q = q;
-    this.filter$.next(filter);
+  public connectFilterData() {
+    return this.filter$.asObservable();
   }
 
   private createFilter(audioContext: AudioContext, metaData: FilterMetadata) {

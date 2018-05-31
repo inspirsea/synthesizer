@@ -25,8 +25,8 @@
     </header>
 
     <div class="flex flex-row flex-space-between">
-      <knob [(ngModel)]="cutoffValue" (ngModelChange)="updateCutoff()" [label]="'noise'" [type]="'balanced'"></knob>
-      <knob [(ngModel)]="resValue" (ngModelChange)="updateRes()" [label]="'mix'" [type]="'balanced'"></knob>
+      <knob  [label]="'noise'" [type]="'balanced'"></knob>
+      <knob  [label]="'mix'" [type]="'balanced'"></knob>
     </div>
   </section>
 

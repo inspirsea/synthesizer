@@ -7,7 +7,7 @@ import { NoiseService } from './noise.service';
 
 @Injectable()
 export class SourceService {
-  public sources$ = new BehaviorSubject<Source[]>([]);
+  private sources$ = new BehaviorSubject<Source[]>([]);
 
   constructor(private noiseService: NoiseService) {
   }
@@ -22,5 +22,17 @@ export class SourceService {
 
   public createNoiseSource(audioContext: AudioContext) {
     return this.noiseService.getWhiteNoiseNode(audioContext);
+  }
+
+  public addSource(source: Source) {
+    this.sources$.getValue().push(source);
+  }
+
+  public updateSource() {
+    this.sources$.next(this.sources$.getValue());
+  }
+
+  public connect() {
+    return this.sources$.asObservable();
   }
 }

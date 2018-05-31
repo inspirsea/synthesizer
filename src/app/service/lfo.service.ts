@@ -6,7 +6,7 @@ import { LfoData } from '../model/lfo-data';
 export class LfoService {
   public lfo$ = new BehaviorSubject<LfoData[]>([]);
 
-  public createLfo(lfo: LfoData, audioContext: AudioContext) {
+  public createLfo(lfo: LfoData, audioContext: AudioContext): [OscillatorNode, GainNode] {
     const ocillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     ocillator.frequency.value = lfo.frequency;
@@ -16,6 +16,6 @@ export class LfoService {
     ocillator.connect(gainNode);
     ocillator.start();
 
-    return gainNode;
+    return [ocillator, gainNode];
   }
 }

@@ -21,7 +21,7 @@ export class SynthService {
     releaseTime: 0.1
   };
 
-  public adsr$ = new BehaviorSubject<ADSR>(this.defaultADSR);
+  private adsr$ = new BehaviorSubject<ADSR>(this.defaultADSR);
   private synths: Synth[] = [];
   private total = 8;
   private count = 0;
@@ -40,12 +40,8 @@ export class SynthService {
         this.sourceService,
         this.filterService,
         this.lfoService,
-        this.adsr$.getValue()));
+        this));
     }
-  }
-
-  public setADSR(adsr: ADSR): void {
-    this.adsr$.next(adsr);
   }
 
   public getSynth(id: number) {
@@ -56,5 +52,13 @@ export class SynthService {
     }
 
     return synth;
+  }
+
+  public updateADSR(adsr: ADSR) {
+    this.adsr$.next(adsr);
+  }
+
+  public connect() {
+    return this.adsr$.asObservable();
   }
 }

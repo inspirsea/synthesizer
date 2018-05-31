@@ -8,24 +8,42 @@ import { LfoService } from '../service/lfo.service';
 import { Source } from '../model/source';
 import { FilterEnvelope } from './filter-envelope';
 import { Envelope } from './envelope';
+import { SynthService } from '../service/synth.service';
+import { FilterMetadata } from '../model/filter-metadata';
 
 export class Synth {
 
   public usedBy = 0;
+  private amplitudeAdsr: ADSR = {} as any;
   private envelopes: Envelope[];
   private sourceNodes: OscillatorNode[] = [];
+  private filterNodes: BiquadFilterNode[] = [];
+  private lfos: OscillatorNode[] = [];
+  private lfosGain: GainNode[] = [];
+  private sources: Source[];
+  private filterMetaData: FilterMetadata;
 
   constructor(
     private audioContext: AudioContext,
     private sourceService: SourceService,
     private filterService: FilterService,
     private lfoService: LfoService,
-    private adsr: ADSR) {
-    this.sourceService.sources$.subscribe(it => {
+    private synthService: SynthService) {
+
+    synthService.connect().subscribe(it => {
+      this.amplitudeAdsr.attackTime = it.attackTime;
+      this.amplitudeAdsr.decayTime = it.decayTime;
+      this.amplitudeAdsr.releaseTime = it.releaseTime;
+      this.amplitudeAdsr.sustainLevel = it.sustainLevel;
+    });
+
+    this.sourceService.connect().subscribe(it => {
+      this.sources = it;
       this.envelopes = this.createSynth();
     });
 
-    this.filterService.filter$.subscribe(it => {
+    this.filterService.connectFilterData().subscribe(it => {
+      this.filterMetaData = it;
       this.envelopes = this.createSynth();
     });
 
@@ -54,22 +72,22 @@ export class Synth {
   }
 
   private createSynth(): Envelope[] {
-    this.removeSourceNodes();
+    this.removeNodes();
 
     const gainNodes = [];
-    const filterNodes = [];
     const envelopes = [];
-    const sources = this.sourceService.sources$.getValue();
     const lfos = this.lfoService.lfo$.getValue();
 
-    for (const source of sources) {
+    for (const source of this.sources) {
       const gainNode = this.createGain(this.audioContext);
       let sourceNode: any;
       if (source.sourcetype === 'ocillator') {
         sourceNode = this.createOcillatorSource(this.audioContext, source as OcillatorSource);
         if (this.lfoService.lfo$.getValue()[0]) {
           const lfo = this.lfoService.createLfo(this.lfoService.lfo$.getValue()[0], this.audioContext);
-          lfo.connect(sourceNode.frequency);
+          lfo[1].connect(sourceNode.frequency);
+          this.lfosGain.push(lfo[1]);
+          this.lfos.push(lfo[0]);
         }
 
         this.sourceNodes.push(sourceNode as OscillatorNode);
@@ -77,17 +95,16 @@ export class Synth {
         sourceNode = this.createNoiseSource(this.audioContext, source as NoiseSource);
       }
 
-      filterNodes.push(this.filterService.connect(sourceNode, gainNode, this.audioContext));
+      this.filterNodes.push(this.filterService.connect(sourceNode, gainNode, this.audioContext));
       gainNode.connect(this.audioContext.destination);
       gainNodes.push(gainNode);
     }
 
-    const filterMetaData = this.filterService.filter$.getValue();
-    if (filterMetaData != null) {
-      envelopes.push(new FilterEnvelope(this.audioContext, filterMetaData.adsr, filterNodes));
+    if (this.filterMetaData != null) {
+      envelopes.push(new FilterEnvelope(this.audioContext, this.filterMetaData.adsr, this.filterMetaData.frequency, this.filterNodes));
     }
 
-    envelopes.push(new VolumeEnvelope(this.audioContext, this.adsr, gainNodes));
+    envelopes.push(new VolumeEnvelope(this.audioContext, this.amplitudeAdsr, gainNodes));
 
     return envelopes;
   }
@@ -110,13 +127,19 @@ export class Synth {
     return sourceNode;
   }
 
-  private removeSourceNodes() {
+  private removeNodes() {
     for (const node of this.sourceNodes) {
       node.stop();
     }
     this.sourceNodes = [];
+
+    for (const node of this.lfos) {
+      node.stop();
+    }
+
+    this.lfos = [];
+    this.lfosGain = [];
+    this.filterNodes = [];
   }
 
-  private removeFilterNodes() {
-  }
 }

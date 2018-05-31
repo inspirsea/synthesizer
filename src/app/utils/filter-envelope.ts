@@ -5,10 +5,10 @@ import { Envelope } from './envelope';
 
 export class FilterEnvelope extends Envelope {
 
-  constructor(audioContext: AudioContext, adsr: ADSR, private nodes: BiquadFilterNode[]) {
+  constructor(audioContext: AudioContext, adsr: ADSR, private cutOffFreq, private nodes: BiquadFilterNode[]) {
     super(audioContext, adsr);
     for (const node of this.nodes) {
-      node.frequency.setTargetAtTime(this.adsr.startLevel, this.audioContext.currentTime, this.adsr.attackTime);
+      node.frequency.setTargetAtTime(this.cutOffFreq, this.audioContext.currentTime, this.adsr.attackTime);
     }
   }
 
@@ -34,7 +34,7 @@ export class FilterEnvelope extends Envelope {
 
   protected setRelease() {
     for (const node of this.nodes) {
-      node.frequency.setTargetAtTime(this.adsr.startLevel, this.audioContext.currentTime, this.adsr.releaseTime);
+      node.frequency.setTargetAtTime(this.cutOffFreq, this.audioContext.currentTime, this.adsr.releaseTime);
     }
   }
 }
