@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ADSR } from '../../../../model/ADSR';
+import { FrequencyManager } from '../../../../utils/frequency-manager';
 
 @Component({
   selector: 'sunesynth',
   templateUrl: './main-view.component.html'
 })
-export class MainViewComponent {
+export class MainViewComponent implements OnInit {
   public ampEnv: ADSR = {
     attackTime: 10,
     decayTime: 0,
@@ -25,4 +26,9 @@ export class MainViewComponent {
     fine: 96
   };
 
+  constructor(private freqManager: FrequencyManager) { }
+
+  ngOnInit() {
+    console.table(this.freqManager.getFrequencyMapping(0, 0));
+  }
 }

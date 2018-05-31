@@ -1,6 +1,14 @@
 key {
-  width: 30px;
-  height: 150px;
+  &.major {
+    width: 30px;
+    height: 150px;
+  }
+
+  &.minor {
+    position: relative;
+    left: -7px;
+    width: 0px;
+  }
 
   .key {
     height: 158px;
@@ -43,7 +51,8 @@ key {
   }
 
   .key-minor {
-    height: 50px;
+    height: 82px;
+    width: 14px;
     background-image: url('./assets/svg/Key_Black_Off.svg');
 
     &:active {

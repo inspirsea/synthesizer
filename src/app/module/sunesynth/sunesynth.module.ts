@@ -13,6 +13,8 @@ import { AmpEnvelopeComponent } from './component/ampenv/ampenv.component';
 import { FilterEnvelopeComponent } from './component/filterenv/filterenv.component';
 import { LfoComponent } from './component/lfo/lfo.component';
 import { VolumeComponent } from './component/volume/volume.component';
+import { KeyboardComponent } from './component/keyboard/keyboard.component';
+import { FrequencyManager } from '../../utils/frequency-manager';
 
 @NgModule({
   imports: [
@@ -35,10 +37,11 @@ import { VolumeComponent } from './component/volume/volume.component';
     AmpEnvelopeComponent,
     FilterEnvelopeComponent,
     LfoComponent,
-    VolumeComponent
+    VolumeComponent,
+    KeyboardComponent
   ],
   providers: [
-
+    FrequencyManager
   ]
 })
 export class SunesynthModule { }
