@@ -1,7 +1,7 @@
 import { Component, Input, ElementRef, AfterViewInit, OnInit, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { fromEvent, Observable } from 'rxjs';
-import { flatMap, map, switchMap, take, takeUntil, takeLast } from 'rxjs/operators';
+import { fromEvent, Observable, timer } from 'rxjs';
+import { flatMap, map, switchMap, take, takeUntil, takeLast, tap, debounce } from 'rxjs/operators';
 
 @Component({
   selector: 'knob',
@@ -78,7 +78,25 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
           }),
           takeUntil(this.mouseUp$)
         );
-      })
+      }),
+      tap((value) => {
+        const changed = value - this.delta;
+
+        this.delta = value;
+
+        switch (this.type) {
+          case 'balanced':
+            this.changePositionBalanced(changed);
+            break;
+          case 'normal':
+            this.changePositionBalanced(changed);
+            break;
+          case 'shapes':
+            this.changePositionShape(changed);
+            break;
+        }
+      }),
+      debounce(() => timer(50))
     );
 
     this.mouseDown$.subscribe(result => {
@@ -86,21 +104,7 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
     });
 
     this.valueChange$.subscribe(result => {
-      const changed = result - this.delta;
-
-      this.delta = result;
-
-      switch (this.type) {
-        case 'balanced':
-          this.changePositionBalanced(changed);
-          break;
-        case 'normal':
-          this.changePositionBalanced(changed);
-          break;
-        case 'shapes':
-          this.changePositionShape(changed);
-          break;
-      }
+      this.writeValue(this.value);
     });
   }
 
@@ -140,13 +144,12 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
       if (this.value < 0) {
         this.value = 0;
       }
-  
+
       if (this.value > 3) {
         this.value = 3;
       }
-  
+
       this.angle = this.shapeStops[this.value];
-      this.writeValue(this.value);
     }
   }
 
@@ -164,8 +167,6 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
     const float = this.position / 300;
 
     this.value = 127 * float;
-
-    this.writeValue(this.value);
   }
 
   public changeValue(change: number): void {

@@ -8,6 +8,7 @@ import { KnobComponent } from './component/knob/knob.component';
 import { FaderComponent } from './component/fader/fader.component';
 import { KeyComponent } from './component/key/key.component';
 import { OscComponent } from './component/osc/osc.component';
+import { NoiseComponent } from './component/noise/noise.component';
 import { FilterComponent } from './component/filter/filter.component';
 import { AmpEnvelopeComponent } from './component/ampenv/ampenv.component';
 import { FilterEnvelopeComponent } from './component/filterenv/filterenv.component';
@@ -33,6 +34,7 @@ import { FrequencyManager } from '../../utils/frequency-manager';
     FaderComponent,
     KeyComponent,
     OscComponent,
+    NoiseComponent,
     FilterComponent,
     AmpEnvelopeComponent,
     FilterEnvelopeComponent,
