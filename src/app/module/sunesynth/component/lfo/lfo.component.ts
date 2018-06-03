@@ -12,7 +12,7 @@ export class LfoComponent {
   constructor(private lfoService: LfoService) { }
 
   public updateRate(): void {
-
+    this.lfoService.updateLfo(this.rateValue);
   }
 
   public updateShape(): void {

@@ -42,26 +42,23 @@ export class Synth {
       this.amplitudeAdsr.sustainLevel = it.sustainLevel;
     });
 
+    this.envelopes = this.createSynth();
+
     this.sourceService.connect().subscribe(it => {
       this.sources = it;
-
     });
 
     this.filterService.connectFilterData().subscribe(it => {
       this.filterMetaData = it;
-      this.envelopes = this.createSynth();
+      // this.envelopes = this.createSynth();
     });
 
-    this.lfoService.lfo$.subscribe(it => {
-      // for (let i = 0; i < this.nrOfOcillators; i++) {
-      //   this.lfos[i][0].frequency.
-      // }
-      // for (const lfo of this.lfos) {
-      //   lfo[0].frequency.setValueAtTime(it);
-      // }
+    this.lfoService.connect().subscribe(it => {
+      for (let i = 0; i < this.nrOfOcillators; i++) {
+        this.lfos[i][0].frequency.setValueAtTime(it.frequency, audioContext.currentTime);
+      }
     });
 
-    this.envelopes = this.createSynth();
   }
 
   public attack(frequency: number) {
