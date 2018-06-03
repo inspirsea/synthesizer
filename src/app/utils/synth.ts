@@ -10,6 +10,7 @@ import { FilterEnvelope } from './filter-envelope';
 import { Envelope } from './envelope';
 import { SynthService } from '../service/synth.service';
 import { FilterMetadata } from '../model/filter-metadata';
+import { LfoConfig } from '../model/lfo-data';
 
 export class Synth {
 
@@ -18,7 +19,6 @@ export class Synth {
   private envelopes: Envelope[];
   private sourceNodes: OscillatorNode[] = [];
   private filterNodes: BiquadFilterNode[] = [];
-  private lfosGain: GainNode[] = [];
   private filterMetaData: FilterMetadata;
 
   private nrOfOcillators = 2;
@@ -56,11 +56,7 @@ export class Synth {
     });
 
     this.lfoService.connect().subscribe(it => {
-      for (let i = 0; i < this.nrOfOcillators; i++) {
-        this.lfos[i][0].frequency.setValueAtTime(it.frequency, audioContext.currentTime);
-        this.lfos[i][0].type = it.type;
-        this.lfos[i][1].gain.setValueAtTime(it.gain, audioContext.currentTime);
-      }
+      this.updateLfo(it, this.nrOfOcillators, this.lfos, this.audioContext);
     });
 
   }
@@ -80,7 +76,7 @@ export class Synth {
 
   private setFrequency(frequency: number, audioContext: AudioContext) {
     for (const source of this.sourceNodes) {
-      // source.frequency.setTargetAtTime(frequency, audioContext.currentTime, 0.001);
+      source.frequency.setValueAtTime(frequency, audioContext.currentTime);
     }
   }
 
@@ -126,5 +122,15 @@ export class Synth {
     const sourceNode = this.sourceService.createNoiseSource(audioContext);
     sourceNode.start();
     return sourceNode;
+  }
+
+  private updateLfo(lfoData: LfoConfig, nrOfOcillators: number, lfos: [OscillatorNode, GainNode][], audioContext: AudioContext) {
+    if (lfoData) {
+      for (let i = 0; i < nrOfOcillators; i++) {
+        lfos[i][0].frequency.setValueAtTime(lfoData.frequency, audioContext.currentTime);
+        lfos[i][0].type = lfoData.type;
+        lfos[i][1].gain.setValueAtTime(lfoData.mix, audioContext.currentTime);
+      }
+    }
   }
 }
