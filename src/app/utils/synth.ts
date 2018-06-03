@@ -50,12 +50,13 @@ export class Synth {
 
     this.filterService.connectFilterData().subscribe(it => {
       this.filterMetaData = it;
-      // this.envelopes = this.createSynth();
     });
 
     this.lfoService.connect().subscribe(it => {
       for (let i = 0; i < this.nrOfOcillators; i++) {
         this.lfos[i][0].frequency.setValueAtTime(it.frequency, audioContext.currentTime);
+        this.lfos[i][0].type = it.type;
+        this.lfos[i][1].gain.setValueAtTime(it.gain, audioContext.currentTime);
       }
     });
 
