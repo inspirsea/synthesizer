@@ -6,16 +6,19 @@ import { LfoService } from '../../../../service/lfo.service';
   templateUrl: './lfo.component.html'
 })
 export class LfoComponent {
-  public rateValue: 0;
-  public shapeValue: 0;
+  public rateValue = 0;
+  public gainValue = 0;
+  public shapeValue = 0;
+  private waveShapes: OscillatorType[] = [
+    'sine',
+    'triangle',
+    'square',
+    'sawtooth'
+  ];
 
   constructor(private lfoService: LfoService) { }
 
-  public updateRate(): void {
-
-  }
-
-  public updateShape(): void {
-
+  public update(): void {
+    this.lfoService.updateLfo(this.rateValue, this.waveShapes[this.shapeValue], this.gainValue);
   }
 }

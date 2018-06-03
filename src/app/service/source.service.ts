@@ -12,10 +12,9 @@ export class SourceService {
   constructor(private noiseService: NoiseService) {
   }
 
-  public createOcillatorSource(audioContext: AudioContext, source: OcillatorSource, frequency: number) {
+  public createOcillatorSource(audioContext: AudioContext, frequency: number) {
     const sourceNode = audioContext.createOscillator();
     sourceNode.frequency.setValueAtTime(frequency, audioContext.currentTime);
-    sourceNode.type = source.type;
 
     return sourceNode;
   }
