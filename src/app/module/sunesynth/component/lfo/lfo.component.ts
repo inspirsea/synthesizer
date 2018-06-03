@@ -24,7 +24,6 @@ export class LfoComponent {
   public updateFreq(): void {
     this.freq = (this.freqValue / 127) * 20;
     this.lfoService.updateFrequency(this.freq);
-    // this.lfoService.updateLfo(this.freqValue, this.waveShapes[this.shapeValue], this.mixValue);
   }
 
   public updateMix(): void {

@@ -1,7 +1,7 @@
 import { Component, Input, ElementRef, AfterViewInit, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { fromEvent, Observable } from 'rxjs';
-import { flatMap, map, switchMap, take, takeUntil, takeLast } from 'rxjs/operators';
+import { fromEvent, Observable, timer } from 'rxjs';
+import { flatMap, map, switchMap, take, takeUntil, takeLast, debounce, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'fader',
@@ -54,7 +54,15 @@ export class FaderComponent implements AfterViewInit, ControlValueAccessor {
           }),
           takeUntil(this.mouseUp$)
         );
-      })
+      }),
+      tap((value) => {
+        const changed = value - this.delta;
+
+        this.delta = value;
+
+        this.changePosition(changed);
+      }),
+      debounce(() => timer(50))
     );
 
     this.mouseDown$.subscribe(result => {
@@ -62,11 +70,7 @@ export class FaderComponent implements AfterViewInit, ControlValueAccessor {
     });
 
     this.valueChange$.subscribe(result => {
-      const changed = result - this.delta;
-
-      this.delta = result;
-
-      this.changePosition(changed);
+      this.writeValue(this.value);
     });
   }
 
@@ -77,7 +81,6 @@ export class FaderComponent implements AfterViewInit, ControlValueAccessor {
 
     this.onChange(value);
     this.changeValue(value);
-    console.log('Writing value:', value);
   }
 
   public registerOnChange(fn: (value: number) => void): void {
@@ -105,7 +108,6 @@ export class FaderComponent implements AfterViewInit, ControlValueAccessor {
     const float = this.position / this.max;
 
     this.value = 127 - (float * 127);
-    this.writeValue(this.value);
   }
 
   public changeValue(change: number): void {
