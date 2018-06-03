@@ -9,9 +9,9 @@ export class LfoService {
   public createLfo(audioContext: AudioContext): [OscillatorNode, GainNode] {
     const ocillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    ocillator.frequency.value = 0;
+    ocillator.frequency.value = 1;
     ocillator.type = 'sine';
-    gainNode.gain.value = 0;
+    gainNode.gain.value = 1;
 
     ocillator.connect(gainNode);
     ocillator.start();
