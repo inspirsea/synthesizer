@@ -1,4 +1,4 @@
 export interface Source {
-  sourcetype: string;
+  waveShape: OscillatorType;
   on: boolean;
 }

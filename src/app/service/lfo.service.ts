@@ -4,7 +4,7 @@ import { LfoData } from '../model/lfo-data';
 
 @Injectable()
 export class LfoService {
-  private lfo$ = new BehaviorSubject<LfoData>({ frequency: 1, type: 'sine', gain: 100 });
+  private lfo$ = new BehaviorSubject<LfoData>(null);
 
   public createLfo(audioContext: AudioContext): [OscillatorNode, GainNode] {
     const ocillator = audioContext.createOscillator();
@@ -20,11 +20,6 @@ export class LfoService {
   }
 
   public updateLfo(rate: number, type: OscillatorType, gain: number) {
-    this.lfo$.next({
-      frequency: rate,
-      gain: gain,
-      type: type
-    });
   }
 
   public connect() {

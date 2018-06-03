@@ -19,7 +19,6 @@ export class Synth {
   private sourceNodes: OscillatorNode[] = [];
   private filterNodes: BiquadFilterNode[] = [];
   private lfosGain: GainNode[] = [];
-  private sources: Source[];
   private filterMetaData: FilterMetadata;
 
   private nrOfOcillators = 2;
@@ -45,7 +44,11 @@ export class Synth {
     this.envelopes = this.createSynth();
 
     this.sourceService.connect().subscribe(it => {
-      this.sources = it;
+      for (let i = 0; i < this.sourceNodes.length; i++) {
+        if (it[0]) {
+          this.sourceNodes[i].type = it[0].waveShape;
+        }
+      }
     });
 
     this.filterService.connectFilterData().subscribe(it => {
@@ -77,7 +80,7 @@ export class Synth {
 
   private setFrequency(frequency: number, audioContext: AudioContext) {
     for (const source of this.sourceNodes) {
-      source.frequency.setTargetAtTime(frequency, audioContext.currentTime, 0.001);
+      // source.frequency.setTargetAtTime(frequency, audioContext.currentTime, 0.001);
     }
   }
 
@@ -88,6 +91,7 @@ export class Synth {
     for (let i = 0; i < this.nrOfOcillators; i++) {
       const gainNode = this.createGain(this.audioContext);
       const sourceNode = this.createOcillatorSource(this.audioContext);
+      this.sourceNodes.push(sourceNode);
       const lfo = this.lfoService.createLfo(this.audioContext);
       lfo[1].connect(sourceNode.frequency);
       this.lfos.push(lfo);
