@@ -1,6 +1,7 @@
 import { Component, Input, ElementRef, OnInit } from '@angular/core';
 import { SynthService } from '../../../../service/synth.service';
 import { Synth } from '../../../../utils/synth';
+import { Note } from '../../../../model/note';
 import { fromEvent, Observable } from 'rxjs';
 
 @Component({
@@ -9,6 +10,7 @@ import { fromEvent, Observable } from 'rxjs';
 })
 export class KeyComponent implements OnInit {
   @Input() type = 'whole';
+  @Input() note: Note;
 
   public state = false;
   public freq = 440;
@@ -24,6 +26,7 @@ export class KeyComponent implements OnInit {
     this.mouseKeyUp$ = fromEvent(this.el.nativeElement, 'mouseup');
 
     this.mouseKeyDown$.subscribe(result => {
+      result.stopPropagation();
       this.play();
     });
 
@@ -33,11 +36,11 @@ export class KeyComponent implements OnInit {
   }
 
   public play() {
-    if (!this.synth || (this.synth.usedBy !== this.freq)) {
-      this.synth = this.synthService.getSynth(this.freq);
+    if (!this.synth || (this.synth.usedBy !== this.note.frequency)) {
+      this.synth = this.synthService.getSynth(this.note.frequency);
     }
 
-    this.synth.attack(this.freq);
+    this.synth.attack(this.note.frequency);
   }
 
   public release() {
