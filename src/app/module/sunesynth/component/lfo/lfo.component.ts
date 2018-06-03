@@ -6,8 +6,8 @@ import { LfoService } from '../../../../service/lfo.service';
   templateUrl: './lfo.component.html'
 })
 export class LfoComponent {
-  public rateValue = 0;
-  public gainValue = 0;
+  public freqValue = 0;
+  public mixValue = 0;
   public shapeValue = 0;
   private waveShapes: OscillatorType[] = [
     'sine',
@@ -16,9 +16,23 @@ export class LfoComponent {
     'sawtooth'
   ];
 
+  private freq = 0;
+  private mix = 0;
+
   constructor(private lfoService: LfoService) { }
 
-  public update(): void {
-    this.lfoService.updateLfo(this.rateValue, this.waveShapes[this.shapeValue], this.gainValue);
+  public updateFreq(): void {
+    this.freq = (this.freqValue / 127) * 20;
+    this.lfoService.updateFrequency(this.freq);
+    // this.lfoService.updateLfo(this.freqValue, this.waveShapes[this.shapeValue], this.mixValue);
+  }
+
+  public updateMix(): void {
+    this.mix = (this.mixValue / 127) * 100;
+    this.lfoService.updateMix(this.mix);
+  }
+
+  public updateShape(): void {
+    this.lfoService.updateShape(this.waveShapes[this.shapeValue]);
   }
 }
