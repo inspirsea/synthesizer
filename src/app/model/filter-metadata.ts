@@ -1,6 +1,6 @@
 import { ADSR } from './ADSR';
 
-export interface FilterMetadata {
+export interface FilterConfig {
   type: BiquadFilterType;
   frequency: number;
   Q: number;

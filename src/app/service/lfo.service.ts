@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LfoConfig } from '../model/lfo-data';
+import { Waves } from '../utils/Waves';
 
 @Injectable()
 export class LfoService {
   private lfo$ = new BehaviorSubject<LfoConfig>({
-    frequency: null,
-    mix: null,
-    type: null
+    frequency: 1,
+    mix: 0,
+    type: Waves.waveShapes[0]
   });
 
   public createLfo(audioContext: AudioContext): [OscillatorNode, GainNode] {
     const ocillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     ocillator.frequency.value = 1;
-    ocillator.type = 'sine';
+    ocillator.type = Waves.waveShapes[0];
     gainNode.gain.value = 100;
 
     ocillator.connect(gainNode);
