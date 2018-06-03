@@ -18,10 +18,15 @@ export class Synth {
   private envelopes: Envelope[];
   private sourceNodes: OscillatorNode[] = [];
   private filterNodes: BiquadFilterNode[] = [];
-  private lfos: OscillatorNode[] = [];
   private lfosGain: GainNode[] = [];
   private sources: Source[];
   private filterMetaData: FilterMetadata;
+
+  private nrOfOcillators = 2;
+  private nrOfNoiseGenerators = 1;
+  private ngOfFilters = 1;
+
+  private lfos: [OscillatorNode, GainNode][] = [];
 
   constructor(
     private audioContext: AudioContext,
@@ -37,19 +42,24 @@ export class Synth {
       this.amplitudeAdsr.sustainLevel = it.sustainLevel;
     });
 
+    this.envelopes = this.createSynth();
+
     this.sourceService.connect().subscribe(it => {
       this.sources = it;
-      this.envelopes = this.createSynth();
     });
 
     this.filterService.connectFilterData().subscribe(it => {
       this.filterMetaData = it;
-      this.envelopes = this.createSynth();
     });
 
-    this.lfoService.lfo$.subscribe(it => {
-      this.envelopes = this.createSynth();
+    this.lfoService.connect().subscribe(it => {
+      for (let i = 0; i < this.nrOfOcillators; i++) {
+        this.lfos[i][0].frequency.setValueAtTime(it.frequency, audioContext.currentTime);
+        this.lfos[i][0].type = it.type;
+        this.lfos[i][1].gain.setValueAtTime(it.gain, audioContext.currentTime);
+      }
     });
+
   }
 
   public attack(frequency: number) {
@@ -72,28 +82,15 @@ export class Synth {
   }
 
   private createSynth(): Envelope[] {
-    this.removeNodes();
-
     const gainNodes = [];
     const envelopes = [];
-    const lfos = this.lfoService.lfo$.getValue();
 
-    for (const source of this.sources) {
+    for (let i = 0; i < this.nrOfOcillators; i++) {
       const gainNode = this.createGain(this.audioContext);
-      let sourceNode: any;
-      if (source.sourcetype === 'ocillator') {
-        sourceNode = this.createOcillatorSource(this.audioContext, source as OcillatorSource);
-        if (this.lfoService.lfo$.getValue()[0]) {
-          const lfo = this.lfoService.createLfo(this.lfoService.lfo$.getValue()[0], this.audioContext);
-          lfo[1].connect(sourceNode.frequency);
-          this.lfosGain.push(lfo[1]);
-          this.lfos.push(lfo[0]);
-        }
-
-        this.sourceNodes.push(sourceNode as OscillatorNode);
-      } else {
-        sourceNode = this.createNoiseSource(this.audioContext, source as NoiseSource);
-      }
+      const sourceNode = this.createOcillatorSource(this.audioContext);
+      const lfo = this.lfoService.createLfo(this.audioContext);
+      lfo[1].connect(sourceNode.frequency);
+      this.lfos.push(lfo);
 
       this.filterNodes.push(this.filterService.connect(sourceNode, gainNode, this.audioContext));
       gainNode.connect(this.audioContext.destination);
@@ -115,8 +112,8 @@ export class Synth {
     return gainNode;
   }
 
-  private createOcillatorSource(audioContext: AudioContext, source: OcillatorSource): OscillatorNode {
-    const sourceNode = this.sourceService.createOcillatorSource(audioContext, source, 440);
+  private createOcillatorSource(audioContext: AudioContext): OscillatorNode {
+    const sourceNode = this.sourceService.createOcillatorSource(audioContext, 440);
     sourceNode.start();
     return sourceNode;
   }
@@ -126,20 +123,4 @@ export class Synth {
     sourceNode.start();
     return sourceNode;
   }
-
-  private removeNodes() {
-    for (const node of this.sourceNodes) {
-      node.stop();
-    }
-    this.sourceNodes = [];
-
-    for (const node of this.lfos) {
-      node.stop();
-    }
-
-    this.lfos = [];
-    this.lfosGain = [];
-    this.filterNodes = [];
-  }
-
 }

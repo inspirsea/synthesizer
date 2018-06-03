@@ -2,5 +2,6 @@ import { Source } from './source';
 
 export interface LfoData {
   frequency: number;
-  source: Source;
+  type: OscillatorType;
+  gain: number;
 }
