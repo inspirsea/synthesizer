@@ -27,6 +27,30 @@ export class LfoService {
     });
   }
 
+  public updateFrequency(freq: number): void {
+    let lfo = this.lfo$.getValue();
+
+    lfo.frequency = freq;
+
+    this.lfo$.next(lfo);
+  }
+
+  public updateShape(shape: OscillatorType): void {
+    let lfo = this.lfo$.getValue();
+
+    lfo.type = shape;
+
+    this.lfo$.next(lfo);
+  }
+
+  public updateMix(mix: number): void {
+    let lfo = this.lfo$.getValue();
+
+    lfo.gain = mix;
+
+    this.lfo$.next(lfo);
+  }
+
   public connect() {
     return this.lfo$.asObservable();
   }

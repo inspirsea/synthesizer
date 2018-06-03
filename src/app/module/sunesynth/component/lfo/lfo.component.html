@@ -1,5 +1,5 @@
 <div class="flex flex-row flex-space-between">
-  <knob [(ngModel)]="rateValue" (ngModelChange)="update()" [label]="'rate'" [type]="'balanced'"></knob>
-  <knob [(ngModel)]="gainValue" (ngModelChange)="update()" [label]="'RES'" [type]="'balanced'"></knob>
-  <knob [(ngModel)]="shapeValue" (ngModelChange)="update()" [label]="'shape'" [type]="'shapes'"></knob>
+  <knob [(ngModel)]="freqValue" (ngModelChange)="updateFreq()" [label]="'Freq'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="mixValue" (ngModelChange)="updateMix()" [label]="'mix'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="shapeValue" (ngModelChange)="updateShape()" [label]="'shape'" [type]="'shapes'"></knob>
 </div>
