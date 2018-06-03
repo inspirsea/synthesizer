@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LfoData } from '../model/lfo-data';
+import { LfoConfig } from '../model/lfo-data';
 
 @Injectable()
 export class LfoService {
-  private lfo$ = new BehaviorSubject<LfoData>({ frequency: 1, type: 'sine', gain: 100 });
+  private lfo$ = new BehaviorSubject<LfoConfig>({
+    frequency: null,
+    mix: null,
+    type: null
+  });
 
   public createLfo(audioContext: AudioContext): [OscillatorNode, GainNode] {
     const ocillator = audioContext.createOscillator();
@@ -19,16 +23,8 @@ export class LfoService {
     return [ocillator, gainNode];
   }
 
-  public updateLfo(rate: number, type: OscillatorType, gain: number) {
-    this.lfo$.next({
-      frequency: rate,
-      gain: gain,
-      type: type
-    });
-  }
-
   public updateFrequency(freq: number): void {
-    let lfo = this.lfo$.getValue();
+    const lfo = this.lfo$.getValue();
 
     lfo.frequency = freq;
 
@@ -36,7 +32,7 @@ export class LfoService {
   }
 
   public updateShape(shape: OscillatorType): void {
-    let lfo = this.lfo$.getValue();
+    const lfo = this.lfo$.getValue();
 
     lfo.type = shape;
 
@@ -44,9 +40,9 @@ export class LfoService {
   }
 
   public updateMix(mix: number): void {
-    let lfo = this.lfo$.getValue();
+    const lfo = this.lfo$.getValue();
 
-    lfo.gain = mix;
+    lfo.mix = mix;
 
     this.lfo$.next(lfo);
   }

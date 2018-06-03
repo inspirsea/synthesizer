@@ -19,19 +19,17 @@ export class OscComponent implements OnInit {
   public fineTuneValue = 63;
   public mixValue = 63;
   public source: OcillatorSource = {
-    on: true,
-    type: this.waveShapes[this.waveShape],
-    sourcetype: 'ocillator'
+    waveShape: this.waveShapes[this.waveShape]
   };
 
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
 
   ngOnInit() {
-    this.sourceService.addSource(this.source);
+    this.sourceService.addOcillator(this.source);
   }
 
   public update(): void {
-    this.source.type = this.waveShapes[this.waveShape];
+    this.source.waveShape = this.waveShapes[this.waveShape];
     this.sourceService.updateSource();
   }
 }

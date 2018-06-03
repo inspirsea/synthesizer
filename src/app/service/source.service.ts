@@ -7,7 +7,7 @@ import { NoiseService } from './noise.service';
 
 @Injectable()
 export class SourceService {
-  private sources$ = new BehaviorSubject<Source[]>([]);
+  private ocillatorData$ = new BehaviorSubject<OcillatorSource[]>([]);
 
   constructor(private noiseService: NoiseService) {
   }
@@ -23,15 +23,15 @@ export class SourceService {
     return this.noiseService.getWhiteNoiseNode(audioContext);
   }
 
-  public addSource(source: Source) {
-    this.sources$.getValue().push(source);
+  public addOcillator(source: OcillatorSource) {
+    this.ocillatorData$.getValue().push(source);
   }
 
   public updateSource() {
-    this.sources$.next(this.sources$.getValue());
+    this.ocillatorData$.next(this.ocillatorData$.getValue());
   }
 
   public connect() {
-    return this.sources$.asObservable();
+    return this.ocillatorData$.asObservable();
   }
 }

@@ -1,7 +1,8 @@
 import { Source } from './source';
+import { Changed } from './changed';
 
-export interface LfoData {
+export interface LfoConfig {
   frequency: number;
   type: OscillatorType;
-  gain: number;
+  mix: number;
 }
