@@ -2,14 +2,14 @@ import { of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ADSR } from '../model/ADSR';
 import { Envelope } from './envelope';
+import { FilterConfig } from '../model/filter-metadata';
 
 export class FilterEnvelope extends Envelope {
 
-  constructor(audioContext: AudioContext, adsr: ADSR, private cutOffFreq, private nodes: BiquadFilterNode[]) {
+  private cutoff = 0;
+
+  constructor(audioContext: AudioContext, adsr: ADSR, private nodes: BiquadFilterNode[]) {
     super(audioContext, adsr);
-    for (const node of this.nodes) {
-      node.frequency.setTargetAtTime(this.cutOffFreq, this.audioContext.currentTime, this.adsr.attackTime);
-    }
   }
 
   public attack() {
@@ -20,9 +20,17 @@ export class FilterEnvelope extends Envelope {
     super.release();
   }
 
+  public update(filterConfig: FilterConfig) {
+    this.cutoff = filterConfig.frequency;
+    for (const node of this.nodes) {
+      node.frequency.setTargetAtTime(this.cutoff, this.audioContext.currentTime, this.adsr.attackTime);
+      node.Q.setValueAtTime(filterConfig.Q, this.audioContext.currentTime);
+    }
+  }
+
   protected setAttack() {
     for (const node of this.nodes) {
-      node.frequency.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+      node.frequency.setTargetAtTime(20000, this.audioContext.currentTime, this.adsr.attackTime);
     }
   }
 
@@ -34,7 +42,7 @@ export class FilterEnvelope extends Envelope {
 
   protected setRelease() {
     for (const node of this.nodes) {
-      node.frequency.setTargetAtTime(this.cutOffFreq, this.audioContext.currentTime, this.adsr.releaseTime);
+      node.frequency.setTargetAtTime(this.cutoff, this.audioContext.currentTime, this.adsr.releaseTime);
     }
   }
 }

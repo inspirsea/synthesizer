@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LfoService } from '../../../../service/lfo.service';
+import { Waves } from '../../../../utils/Waves';
 
 @Component({
   selector: 'lfo',
@@ -9,12 +10,6 @@ export class LfoComponent {
   public freqValue = 0;
   public mixValue = 0;
   public shapeValue = 0;
-  private waveShapes: OscillatorType[] = [
-    'sine',
-    'triangle',
-    'square',
-    'sawtooth'
-  ];
 
   private freq = 0;
   private mix = 0;
@@ -32,6 +27,6 @@ export class LfoComponent {
   }
 
   public updateShape(): void {
-    this.lfoService.updateShape(this.waveShapes[this.shapeValue]);
+    this.lfoService.updateShape(Waves.waveShapes[this.shapeValue]);
   }
 }

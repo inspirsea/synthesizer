@@ -1,25 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { SourceService, AudioService } from '../../../../service';
 import { OcillatorSource } from '../../../../model/ocillator-source';
+import { Waves } from '../../../../utils/Waves';
 
 @Component({
   selector: 'osc',
   templateUrl: './osc.component.html'
 })
 export class OscComponent implements OnInit {
-  private waveShapes: OscillatorType[] = [
-    'sine',
-    'triangle',
-    'square',
-    'sawtooth'
-  ];
-
   public waveShape = 0;
   public frequencyValue = 63;
   public fineTuneValue = 63;
   public mixValue = 63;
   public source: OcillatorSource = {
-    waveShape: this.waveShapes[this.waveShape]
+   waveShape: Waves.waveShapes[0]
   };
 
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
@@ -29,7 +23,7 @@ export class OscComponent implements OnInit {
   }
 
   public update(): void {
-    this.source.waveShape = this.waveShapes[this.waveShape];
+    this.source.waveShape = Waves.waveShapes[this.waveShape];
     this.sourceService.updateSource();
   }
 }
