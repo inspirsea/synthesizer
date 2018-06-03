@@ -10,7 +10,7 @@ export class AmpEnvelopeComponent {
   public attackValue = 0;
   public delayValue = 63;
   public sustainValue = 63;
-  public releaseValue = 24;
+  public releaseValue = 6;
 
   constructor(private synthService: SynthService) { }
 
