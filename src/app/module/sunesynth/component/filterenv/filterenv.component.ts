@@ -18,10 +18,10 @@ export class FilterEnvelopeComponent {
     const adsr: ADSR = {
       attackTime: (this.attackValue / 127) * 4,
       decayTime: (this.delayValue / 127) * 4,
-      sustainLevel: (this.sustainValue / 127) * 100,
+      sustainLevel: (this.sustainValue / 127) * 20000,
       releaseTime: (this.releaseValue / 127) * 4
     };
 
-    // this.filterService.setADSR(adsr);
+    this.filterService.updateAdsr(adsr);
   }
 }

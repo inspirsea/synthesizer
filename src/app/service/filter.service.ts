@@ -56,6 +56,14 @@ export class FilterService {
     this.filter$.next(filterConfig);
   }
 
+  public updateAdsr(adsr: ADSR) {
+    const filterConfig = this.filter$.getValue();
+
+    filterConfig.adsr = adsr;
+
+    this.filter$.next(filterConfig);
+  }
+
   public connectFilterData() {
     return this.filter$.asObservable();
   }

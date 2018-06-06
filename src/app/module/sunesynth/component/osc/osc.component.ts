@@ -13,7 +13,9 @@ export class OscComponent implements OnInit {
   public fineTuneValue = 63;
   public mixValue = 63;
   public source: OcillatorSource = {
-   waveShape: Waves.waveShapes[0]
+   waveShape: Waves.waveShapes[0],
+   freq: this.frequencyValue,
+   fine: this.fineTuneValue
   };
 
   constructor(private audioService: AudioService, private sourceService: SourceService) { }
@@ -24,6 +26,16 @@ export class OscComponent implements OnInit {
 
   public update(): void {
     this.source.waveShape = Waves.waveShapes[this.waveShape];
+    this.sourceService.updateSource();
+  }
+
+  public updateFrequency() {
+    this.source.freq = ((this.frequencyValue / 127) * 12) - 6;
+    this.sourceService.updateSource();
+  }
+
+  public updateFine() {
+    this.source.fine = ((this.fineTuneValue / 127) * 2)  - 1;
     this.sourceService.updateSource();
   }
 }

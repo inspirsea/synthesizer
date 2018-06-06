@@ -40,7 +40,7 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
   }
 
   ngOnInit() {
-    switch(this.type) {
+    switch (this.type) {
       case 'balansed':
         this.angle = -60;
         break;
@@ -174,7 +174,7 @@ export class KnobComponent implements AfterViewInit, OnInit, ControlValueAccesso
 
     this.value = change;
 
-    switch(this.type) {
+    switch (this.type) {
       case 'balanced':
         float = this.value / 127;
         this.position = float * 300;
