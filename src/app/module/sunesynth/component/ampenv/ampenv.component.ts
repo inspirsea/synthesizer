@@ -16,7 +16,7 @@ export class AmpEnvelopeComponent {
 
   public updateADSR(): void {
     const adsr: ADSR = {
-      attackTime: (this.attackValue / 127) * 2 + .01,
+      attackTime: (this.attackValue / 127) * 2 + .05,
       decayTime: (this.delayValue / 127) * 2 + .01,
       sustainLevel: (this.sustainValue / 127) + .01,
       releaseTime: (this.releaseValue / 127) * 2 + .01

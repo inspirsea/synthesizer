@@ -20,7 +20,7 @@ export class FilterComponent implements OnInit {
   }
 
   public updateCutoff(): void {
-    this.filterService.updateCutoff(this.cutoff);
+    this.filterService.updateCutoff((this.cutoff / 127) * 20000);
   }
 
   public updateRes(): void {

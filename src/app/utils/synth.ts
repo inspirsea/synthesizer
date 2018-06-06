@@ -25,6 +25,7 @@ export class Synth {
   private envelopes: Envelope[];
   private filterEnvelope: FilterEnvelope;
   private sourceNodes: OscillatorNode[] = [];
+  private sourceConfig: OcillatorSource[] = [];
   private filterNodes: BiquadFilterNode[] = [];
   private nrOfOcillators = 2;
   private nrOfNoiseGenerators = 1;
@@ -49,6 +50,7 @@ export class Synth {
     this.envelopes = this.createSynth();
 
     this.sourceService.connect().subscribe(it => {
+      this.sourceConfig = it;
       for (let i = 0; i < this.nrOfOcillators; i++) {
         if (it[0]) {
           this.sourceNodes[i].type = it[i].waveShape;
@@ -86,8 +88,10 @@ export class Synth {
   }
 
   private setFrequency(frequency: number, audioContext: AudioContext) {
-    for (const source of this.sourceNodes) {
-      source.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    for (let i = 0; i < this.sourceConfig.length; i++) {
+      let freq = Math.pow(1.059463094359, this.sourceConfig[i].freq) * frequency;
+      freq = Math.pow(1.059463094359, this.sourceConfig[i].fine) * freq;
+      this.sourceNodes[i].frequency.setValueAtTime(freq, audioContext.currentTime);
     }
   }
 
@@ -141,4 +145,5 @@ export class Synth {
       }
     }
   }
+
 }
