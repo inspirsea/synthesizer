@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { VolumeService } from '../../../../service/volumeService';
 
 @Component({
   selector: 'volume',
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
 })
 export class VolumeComponent {
   public volumeValue = 63;
-  
-  constructor() { }
+
+  constructor(private volumeService: VolumeService) {
+  }
+
+  public updateVolume() {
+    this.volumeService.update((this.volumeValue / 127));
+  }
 }

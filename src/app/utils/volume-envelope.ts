@@ -2,10 +2,14 @@ import { of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ADSR } from '../model/ADSR';
 import { Envelope } from './envelope';
+import { OcillatorSource } from '../model/ocillator-source';
+import { VolumeService } from '../service/volumeService';
 
 export class VolumeEnvelope extends Envelope {
 
-  constructor(audioContext: AudioContext, adsr: ADSR, private gainNodes: GainNode[]) {
+  private mix: number[] = [1, 1];
+
+  constructor(audioContext: AudioContext, adsr: ADSR, private gainNodes: GainNode[], private volumeService: VolumeService) {
     super(audioContext, adsr);
   }
 
@@ -17,15 +21,21 @@ export class VolumeEnvelope extends Envelope {
     super.release();
   }
 
+  public setMix(mix: number[]) {
+    this.mix = mix;
+  }
+
   protected setAttack() {
-    for (const node of this.gainNodes) {
-      node.gain.setTargetAtTime(1, this.audioContext.currentTime, this.adsr.attackTime);
+    const volume = 1 * this.volumeService.getVolume();
+    for (let i = 0; i < this.gainNodes.length; i++) {
+      this.gainNodes[i].gain.setTargetAtTime((this.mix[i] * volume), this.audioContext.currentTime, this.adsr.attackTime);
     }
   }
 
   protected setDecay() {
-    for (const node of this.gainNodes) {
-      node.gain.setTargetAtTime(this.adsr.sustainLevel, this.audioContext.currentTime, this.adsr.decayTime);
+    const volume = this.volumeService.getVolume() * this.adsr.sustainLevel;
+    for (let i = 0; i < this.gainNodes.length; i++) {
+      this.gainNodes[i].gain.setTargetAtTime((volume * this.mix[i]), this.audioContext.currentTime, this.adsr.decayTime);
     }
   }
 

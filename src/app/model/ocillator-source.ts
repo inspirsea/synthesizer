@@ -4,4 +4,5 @@ export class OcillatorSource {
   waveShape: OscillatorType;
   freq: number;
   fine: number;
+  mix: number;
 }

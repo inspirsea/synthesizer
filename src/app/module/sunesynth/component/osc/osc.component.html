@@ -2,5 +2,5 @@
   <knob [(ngModel)]="waveShape" (ngModelChange)="update()" [label]="'shape'" [type]="'shapes'"></knob>
   <knob [(ngModel)]="frequencyValue" (ngModelChange)="updateFrequency()" [label]="'freq'" [type]="'balanced'"></knob>
   <knob [(ngModel)]="fineTuneValue" (ngModelChange)="updateFine()" [label]="'fine'" [type]="'balanced'"></knob>
-  <knob [(ngModel)]="mixValue" [label]="'mix'" [type]="'balanced'"></knob>
+  <knob [(ngModel)]="mixValue" (ngModelChange)="updateMix()" [label]="'mix'" [type]="'balanced'"></knob>
 </div>

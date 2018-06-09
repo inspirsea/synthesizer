@@ -11,6 +11,7 @@ import { Envelope } from './envelope';
 import { SynthService } from '../service/synth.service';
 import { FilterConfig } from '../model/filter-metadata';
 import { LfoConfig } from '../model/lfo-data';
+import { VolumeService } from '../service/volumeService';
 
 export class Synth {
 
@@ -22,7 +23,7 @@ export class Synth {
     releaseTime: 0.01,
     sustainLevel: 0.5
   };
-  private envelopes: Envelope[];
+  private envelopes: VolumeEnvelope[];
   private filterEnvelope: FilterEnvelope;
   private sourceNodes: OscillatorNode[] = [];
   private sourceConfig: OcillatorSource[] = [];
@@ -38,7 +39,8 @@ export class Synth {
     private sourceService: SourceService,
     private filterService: FilterService,
     private lfoService: LfoService,
-    private synthService: SynthService) {
+    private synthService: SynthService,
+    private volumeService: VolumeService) {
 
     synthService.connect().subscribe(it => {
       this.amplitudeAdsr.attackTime = it.attackTime;
@@ -56,6 +58,7 @@ export class Synth {
           this.sourceNodes[i].type = it[i].waveShape;
         }
       }
+      this.setMix(this.sourceConfig.map(conf => conf.mix));
     });
 
     this.filterService.connectFilterData().subscribe(it => {
@@ -87,6 +90,12 @@ export class Synth {
     this.filterEnvelope.release();
   }
 
+  private setMix(mix: number[]) {
+    for (const envelope of this.envelopes) {
+      envelope.setMix(mix);
+    }
+  }
+
   private setFrequency(frequency: number, audioContext: AudioContext) {
     for (let i = 0; i < this.sourceConfig.length; i++) {
       let freq = Math.pow(1.059463094359, this.sourceConfig[i].freq) * frequency;
@@ -95,7 +104,7 @@ export class Synth {
     }
   }
 
-  private createSynth(): Envelope[] {
+  private createSynth(): VolumeEnvelope[] {
     const gainNodes = [];
     const envelopes = [];
 
@@ -113,7 +122,7 @@ export class Synth {
     }
 
     this.filterEnvelope = new FilterEnvelope(this.audioContext, this.filterAdsr, this.filterNodes);
-    envelopes.push(new VolumeEnvelope(this.audioContext, this.amplitudeAdsr, gainNodes));
+    envelopes.push(new VolumeEnvelope(this.audioContext, this.amplitudeAdsr, gainNodes, this.volumeService));
 
     return envelopes;
   }
