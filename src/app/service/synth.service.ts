@@ -43,7 +43,8 @@ export class SynthService {
         this.filterService,
         this.lfoService,
         this,
-        this.volumeService));
+        this.volumeService,
+        this.noiseService));
     }
   }
 
