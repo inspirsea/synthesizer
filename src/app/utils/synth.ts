@@ -11,6 +11,8 @@ import { Envelope } from './envelope';
 import { SynthService } from '../service/synth.service';
 import { FilterConfig } from '../model/filter-metadata';
 import { LfoConfig } from '../model/lfo-data';
+import { VolumeService } from '../service/volumeService';
+import { NoiseService } from '../service';
 
 export class Synth {
 
@@ -22,8 +24,10 @@ export class Synth {
     releaseTime: 0.01,
     sustainLevel: 0.5
   };
-  private envelopes: Envelope[];
+  private envelopes: VolumeEnvelope[];
   private filterEnvelope: FilterEnvelope;
+  private noiseSource: AudioBufferSourceNode;
+  private noiseGain: GainNode;
   private sourceNodes: OscillatorNode[] = [];
   private sourceConfig: OcillatorSource[] = [];
   private filterNodes: BiquadFilterNode[] = [];
@@ -38,7 +42,9 @@ export class Synth {
     private sourceService: SourceService,
     private filterService: FilterService,
     private lfoService: LfoService,
-    private synthService: SynthService) {
+    private synthService: SynthService,
+    private volumeService: VolumeService,
+    private noiseService: NoiseService) {
 
     synthService.connect().subscribe(it => {
       this.amplitudeAdsr.attackTime = it.attackTime;
@@ -56,6 +62,7 @@ export class Synth {
           this.sourceNodes[i].type = it[i].waveShape;
         }
       }
+      this.setMix(this.sourceConfig.map(conf => conf.mix));
     });
 
     this.filterService.connectFilterData().subscribe(it => {
@@ -68,6 +75,10 @@ export class Synth {
 
     this.lfoService.connect().subscribe(it => {
       this.updateLfo(it, this.nrOfOcillators, this.lfos, this.audioContext);
+    });
+
+    this.noiseService.connect().subscribe(it => {
+      this.setNoiseMix(it);
     });
 
   }
@@ -87,6 +98,18 @@ export class Synth {
     this.filterEnvelope.release();
   }
 
+  private setMix(mix: number[]) {
+    for (const envelope of this.envelopes) {
+      envelope.setMix(mix);
+    }
+  }
+
+  private setNoiseMix(mix: number) {
+    for (const envelope of this.envelopes) {
+      envelope.setNoiseMix(mix);
+    }
+  }
+
   private setFrequency(frequency: number, audioContext: AudioContext) {
     for (let i = 0; i < this.sourceConfig.length; i++) {
       let freq = Math.pow(1.059463094359, this.sourceConfig[i].freq) * frequency;
@@ -95,7 +118,7 @@ export class Synth {
     }
   }
 
-  private createSynth(): Envelope[] {
+  private createSynth(): VolumeEnvelope[] {
     const gainNodes = [];
     const envelopes = [];
 
@@ -112,10 +135,22 @@ export class Synth {
       gainNodes.push(gainNode);
     }
 
+    this.noiseGain = this.createNoiseChannel(gainNodes);
+
     this.filterEnvelope = new FilterEnvelope(this.audioContext, this.filterAdsr, this.filterNodes);
-    envelopes.push(new VolumeEnvelope(this.audioContext, this.amplitudeAdsr, gainNodes));
+    envelopes.push(new VolumeEnvelope(this.audioContext, this.amplitudeAdsr, gainNodes, this.volumeService, this.noiseGain));
 
     return envelopes;
+  }
+
+  private createNoiseChannel(gainNodes: GainNode[]) {
+    const gainNode = this.createGain(this.audioContext);
+    const sourceNode = this.createNoiseSource(this.audioContext);
+    this.noiseSource = sourceNode;
+    this.filterNodes.push(this.filterService.connect(sourceNode, gainNode, this.audioContext));
+    gainNode.connect(this.audioContext.destination);
+
+    return gainNode;
   }
 
   private createGain(audioContext: AudioContext) {
@@ -130,7 +165,7 @@ export class Synth {
     return sourceNode;
   }
 
-  private createNoiseSource(audioContext: AudioContext, source: NoiseSource) {
+  private createNoiseSource(audioContext: AudioContext) {
     const sourceNode = this.sourceService.createNoiseSource(audioContext);
     sourceNode.start();
     return sourceNode;

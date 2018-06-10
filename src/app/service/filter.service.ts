@@ -22,16 +22,10 @@ export class FilterService {
   });
 
   public connect(startNode: AudioNode, endNode: AudioNode, audioContext: AudioContext) {
-    let currentNode = startNode;
-    let filter: BiquadFilterNode = null;
+    const filter = this.createFilter(audioContext, this.filter$.getValue());
 
-    if (this.filter$.getValue() != null) {
-      filter = this.createFilter(audioContext, this.filter$.getValue());
-      currentNode.connect(filter);
-      currentNode = filter;
-    }
-
-    currentNode.connect(endNode);
+    startNode.connect(filter);
+    filter.connect(endNode);
 
     return filter;
   }

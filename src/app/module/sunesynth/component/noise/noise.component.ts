@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NoiseService } from '../../../../service';
 
 @Component({
   selector: 'noise',
@@ -8,11 +9,11 @@ export class NoiseComponent {
   public typeValue: 0;
   public mixValue: 0;
 
-  constructor() { }
+  constructor(private noiseService: NoiseService) { }
 
   public update(): void {
-    let mix = (this.mixValue / 127) * 100;
+    const mix = (this.mixValue / 127) * 1;
 
-    // Update the mix with mix.
+    this.noiseService.updateMix(mix);
   }
 }

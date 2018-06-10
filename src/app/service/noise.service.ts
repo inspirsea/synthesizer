@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class NoiseService {
 
   private whiteNoiseBuffer: AudioBuffer;
+  public noiseMix = new BehaviorSubject<number>(0);
 
   constructor() {
   }
@@ -24,5 +26,13 @@ export class NoiseService {
     whiteNoiseSource.loop = true;
 
     return whiteNoiseSource;
+  }
+
+  public updateMix(mix: number) {
+    this.noiseMix.next(mix);
+  }
+
+  public connect() {
+    return this.noiseMix.asObservable();
   }
 }

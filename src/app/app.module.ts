@@ -11,6 +11,7 @@ import { FilterService } from './service/filter.service';
 import { SourceService } from './service/source.service';
 import { AudioService } from './service/audio.service';
 import { LfoService } from './service/lfo.service';
+import { VolumeService } from './service/volumeService';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { LfoService } from './service/lfo.service';
     FilterService,
     AudioService,
     SourceService,
-    LfoService],
+    LfoService,
+    VolumeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
